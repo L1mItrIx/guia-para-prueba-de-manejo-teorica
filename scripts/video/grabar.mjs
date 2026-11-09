@@ -33,7 +33,7 @@ const dir = "videos/salida";
 mkdirSync(dir, { recursive: true });
 
 if (!existsSync("out/index.html")) {
-  console.error("✘ Falta el export estático. Corré primero: npm run build");
+  console.error("✘ Falta el export estático. Primero hay que correr: npm run build");
   process.exit(1);
 }
 const servidor = spawn("npx", ["serve", "out", "-l", String(PUERTO), "--no-clipboard"], { stdio: "ignore" });

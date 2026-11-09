@@ -12,8 +12,11 @@ asfalto, líneas de carril, el amarillo de demarcación y los colores de la band
 Cada decisión visual debe poder justificarse con esa idea. Si algo podría estar en cualquier
 plantilla SaaS (degradado morado, tarjetas con sombra difusa y emoji, ilustraciones 3D de stock), no va.
 
-**Tono:** cercano y tico (voseo: "Elegí", "Practicá"), directo, sin infantilizar. Las personas
-que estudian para el teórico están nerviosas: la interfaz da calma y claridad, no ruido.
+**Tono:** español neutral, natural e **impersonal**: sin voseo, sin tuteo y sin "usted"
+("Cómo estudiar este tema", "Ver la respuesta", "Un carro llega a…"). Directo, sin frases de marketing
+("pasá a la primera") ni de robot. Las personas que estudian están nerviosas: la interfaz da calma y claridad.
+Nunca presentar el simulacro como la prueba oficial: es una práctica; la prueba la aplica Educación Vial.
+`tests/unit/textos.test.ts` falla con las formas prohibidas más comunes.
 
 ## Tokens (fuente de verdad: `src/app/globals.css`)
 
@@ -73,7 +76,7 @@ que estudian para el teórico están nerviosas: la interfaz da calma y claridad,
 ## Layout y responsive
 
 - Diseñar primero para 390 px de ancho; probar también 1280 px. Sin scroll horizontal (el e2e lo revisa en móvil).
-- Ancho de lectura: `max-w-3xl` para texto y quizzes; `max-w-4xl/5xl` para escenas y presentaciones.
+- Ancho de lectura: `max-w-3xl` para quizzes y flashcards; `max-w-5xl` para el resumen con animaciones.
 - Margen lateral de 16 px en móvil (`px-4`).
 
 ## Checklist de revisión visual (antes de dar por terminado)

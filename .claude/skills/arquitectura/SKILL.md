@@ -32,17 +32,16 @@ src/
     [licencia]/                       'carro' | 'moto' (generateStaticParams)
       page.tsx                        lista de temas de esa licencia
       simulacro/page.tsx              examen: 40 preguntas, 50 min, aprueba con 70
-      [tema]/page.tsx                 resumen del tema + accesos a los modos
-      [tema]/quiz/page.tsx
-      [tema]/flashcards/page.tsx
-      [tema]/presentacion/page.tsx
-      [tema]/escena/page.tsx          escena 3D interactiva (si el tema tiene)
+      [tema]/page.tsx                 elegir cómo estudiar: resumen, quiz o flashcards
+      [tema]/resumen/page.tsx         resumen con la animación de cada sección
+      [tema]/quiz/page.tsx            preguntas; las de situación muestran su animación
+      [tema]/flashcards/page.tsx      tarjetas; al voltear, algunas muestran su animación
     progreso/page.tsx                 progreso guardado en el navegador
     fuentes/page.tsx                  fuentes oficiales y fecha de verificación
   components/
     ui/                               piezas genéricas (Boton, Tarjeta, BarraProgreso, Insignia)
-    estudio/                          Quiz, Flashcards, Presentacion, Resumen, Simulacro
-    three/                            Canvas3D, piezas/, escenas/  (ver skill animacion-3d)
+    estudio/                          Quiz, Flashcards, EscenasSeccion, Simulacro, progreso
+    three/                            Canvas3D, piezas/, escenas/EscenaAnimada + EscenaEmbebida (skill animacion-3d)
   content/
     schema.ts                         esquemas Zod + tipos inferidos
     licencias.ts                      definición de B1 y A (nombre, slug, disponible)
@@ -54,8 +53,7 @@ src/
         resumen.ts                    secciones del resumen
         preguntas.ts                  banco de preguntas
         flashcards.ts
-        diapositivas.ts
-        escenarios.ts                 (opcional) escenarios de la escena 3D
+        escenas.ts                    escenas animadas (cruce / rotonda) que usan los tres modos
   lib/                                lógica pura: barajar, calificar, leitner, tiempo
   store/progreso.ts                   zustand + persist
 tests/
@@ -81,7 +79,8 @@ Skills relacionadas: `frontend-design` (cómo se ve), `animacion-3d` (cómo se a
 2. Rellenar los datos con fuentes reales (Ley 9078, Manual del Conductor 2026). Anotar cada fuente en `docs/FUENTES.md`.
 3. Registrar el tema en `src/content/temas/index.ts`.
 4. `npm test` → el test de contenido valida esquema, ids únicos y que la respuesta correcta exista.
-5. Si lleva escena 3D: seguir la skill `animacion-3d` y añadir `escenarios.ts`.
+5. Animaciones: definirlas en `escenas.ts` (ver `animacion-3d/references/plantilla-escena.ts`) y enlazarlas desde
+   secciones (`escenas: [...]`), preguntas y flashcards (`escena: "id"`). El test exige que cada escena se use.
 6. `npm run build` → la ruta se genera sola gracias a `generateStaticParams`.
 7. Actualizar `docs/PROGRESO.md` (skill `progreso-proyecto`).
 

@@ -2,48 +2,15 @@
   "id": "ceda-vs-alto",
   "titulo": "¿Quién pasa primero: CEDA o ALTO?",
   "formato": "vertical",
-  "ruta": "/carro/intersecciones/escena/",
+  "ruta": "/carro/intersecciones/resumen/#ceda",
   "fuente": "Ley de Tránsito 9078, art. 105 inciso g)",
   "pasos": [
-    {
-      "accion": "esperarElemento",
-      "selector": "[data-testid=canvas-3d] canvas",
-      "ms": 400
-    },
-    {
-      "accion": "clic",
-      "rol": "tab",
-      "nombre": "CEDA frente a ALTO",
-      "ms": 600
-    },
-    {
-      "accion": "centrar",
-      "selector": "[data-testid=canvas-3d]",
-      "texto": "El rojo tiene ALTO. El verde tiene CEDA.",
-      "ms": 2800
-    },
-    {
-      "accion": "esperar",
-      "texto": "¿Quién pasa primero?",
-      "ms": 2200
-    },
-    {
-      "accion": "clic",
-      "rol": "button",
-      "nombre": "Carro verde",
-      "texto": "CEDA tiene prioridad sobre ALTO: pasa primero el verde.",
-      "ms": 3300
-    },
-    {
-      "accion": "centrar",
-      "selector": "[data-testid=canvas-3d]",
-      "texto": "El rojo se detuvo en el ALTO. Ahora pasa él.",
-      "ms": 3500
-    },
-    {
-      "accion": "esperar",
-      "texto": "Ley de Tránsito 9078, art. 105 g) · Teórico CR",
-      "ms": 2500
-    }
+    { "accion": "esperarElemento", "selector": "[data-escena=ceda-vs-alto] canvas", "ms": 300 },
+    { "accion": "centrar", "selector": "[data-escena=ceda-vs-alto]", "texto": "El rojo tiene ALTO. El verde tiene CEDA.", "ms": 2800 },
+    { "accion": "esperar", "texto": "¿Quién pasa primero?", "ms": 2200 },
+    { "accion": "clic", "selector": "[data-escena=ceda-vs-alto] [data-accion=reproducir]", "texto": "El rojo se detiene por completo en su ALTO.", "ms": 1300 },
+    { "accion": "esperar", "texto": "CEDA tiene prioridad sobre ALTO: pasa primero el verde.", "ms": 4600 },
+    { "accion": "esperar", "texto": "Después pasa el rojo.", "ms": 3000 },
+    { "accion": "esperar", "texto": "Ley de Tránsito 9078, art. 105 g) · Teórico CR", "ms": 2500 }
   ]
 }

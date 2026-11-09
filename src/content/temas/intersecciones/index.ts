@@ -2,8 +2,7 @@ import type { TemaEntrada } from "@/content/schema";
 import { resumen } from "./resumen";
 import { preguntas } from "./preguntas";
 import { flashcards } from "./flashcards";
-import { diapositivas } from "./diapositivas";
-import { escenarios } from "./escenarios";
+import { escenas } from "./escenas";
 
 const tema: TemaEntrada = {
   slug: "intersecciones",
@@ -13,8 +12,7 @@ const tema: TemaEntrada = {
   resumen,
   preguntas,
   flashcards,
-  diapositivas,
-  escenarios,
+  escenas,
 };
 
 export default tema;

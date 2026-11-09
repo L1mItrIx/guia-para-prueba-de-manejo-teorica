@@ -32,21 +32,22 @@ npm run video -- videos/guiones/ceda-vs-alto.json
   "titulo": "¿Quién pasa primero: CEDA o ALTO?",
   "formato": "vertical",
   "tema": "light",
-  "ruta": "/carro/intersecciones/escena/",
+  "ruta": "/carro/intersecciones/resumen/#ceda",
   "fuente": "Ley de Tránsito 9078, art. 105 inciso g)",
   "pasos": [
-    { "accion": "esperarElemento", "selector": "[data-testid=canvas-3d] canvas", "ms": 400 },
-    { "accion": "clic", "rol": "tab", "nombre": "CEDA frente a ALTO", "ms": 600 },
-    { "accion": "centrar", "selector": "[data-testid=canvas-3d]", "texto": "El rojo tiene ALTO. El verde tiene CEDA.", "ms": 2800 }
+    { "accion": "esperarElemento", "selector": "[data-escena=ceda-vs-alto] canvas", "ms": 300 },
+    { "accion": "centrar", "selector": "[data-escena=ceda-vs-alto]", "texto": "El rojo tiene ALTO. El verde tiene CEDA.", "ms": 2800 },
+    { "accion": "clic", "selector": "[data-escena=ceda-vs-alto] [data-accion=reproducir]", "texto": "El rojo se detiene por completo en su ALTO.", "ms": 1300 }
   ]
 }
 ```
 
 - `formato`: `vertical` (1080×1920, reels/shorts/TikTok) u `horizontal` (1920×1080).
 - Acciones: `esperar`, `clic`, `centrar` (hace scroll al elemento), `esperarElemento`.
+  Cada animación está en `[data-escena=<id>]` y su botón en `[data-escena=<id>] [data-accion=reproducir]`.
   Elegir el elemento con `rol` + `nombre` (como en los tests e2e) o con `selector`.
 - `texto`: subtítulo que aparece al empezar el paso y dura hasta el siguiente paso con texto.
-- `ms`: pausa después del paso. Las animaciones de los carros duran ~3,2 s cada una.
+- `ms`: pausa después del paso. Los carros avanzan a ~7,5 m/s (un cruce completo tarda 2–5 s); medir la duración de la escena antes de cuadrar los subtítulos.
 - Por defecto se ocultan encabezado, pie, migas y `h1` (`"ocultarInterfaz": false` para mostrarlos).
 
 ## Reglas de contenido
@@ -54,7 +55,7 @@ npm run video -- videos/guiones/ceda-vs-alto.json
 1. **Un video = una regla.** 15–40 segundos. Estructura: situación (3 s) → pregunta (2 s) → respuesta animada → porqué → fuente.
 2. **Todo dato sale del contenido verificado** (`src/content/`); el video no dice nada que la app no diga.
 3. **Último subtítulo con la fuente** (ley y artículo) y "Teórico CR". Si el dato es una multa, decir que es el monto 2026.
-4. **Subtítulos siempre** (la mayoría ve videos sin sonido): frases cortas, máximo ~2 líneas, voseo.
+4. **Subtítulos siempre** (la mayoría ve videos sin sonido): frases cortas, máximo ~2 líneas, tono neutral e impersonal.
 5. El texto debe coincidir con lo que se ve en ese momento: revisar el `.srt` contra la animación.
 6. Sin música ni audio de terceros. Si en el futuro se agrega voz, que sea propia o con licencia, y siempre con subtítulos.
 7. No usar logos del MOPT, COSEVI ni de Educación Vial: el sitio no está afiliado.

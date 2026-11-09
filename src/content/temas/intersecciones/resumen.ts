@@ -18,6 +18,7 @@ export const resumen: TemaEntrada["resumen"] = [
       "Sin señales y vías iguales: cede el que tiene al otro a su derecha",
     ],
     multa: "Irrespetar las prioridades de paso: multa categoría D, ¢60 679,58 (2026).",
+    escenas: ["sin-senales", "primaria-secundaria"],
     ref: ley("Art. 105 y art. 146 inciso c)"),
   },
   {
@@ -29,6 +30,7 @@ export const resumen: TemaEntrada["resumen"] = [
     ],
     puntosClave: ["Alto = detención total, siempre", "Luego ceder a peatones y a la vía prioritaria"],
     multa: "Irrespetar el ALTO en una intersección: multa categoría B, ¢245 195,06 (2026).",
+    escenas: ["alto-vs-libre"],
     ref: ley("Art. 104 inciso f) y art. 144 inciso d)"),
   },
   {
@@ -39,6 +41,7 @@ export const resumen: TemaEntrada["resumen"] = [
       "Si se acerca un vehículo que por su cercanía o rapidez puede poner en peligro la seguridad, debe detenerse por completo. Si no viene nadie, puede continuar sin detenerse.",
     ],
     puntosClave: ["Ceda = bajar la velocidad y observar", "Detenerse solo si viene alguien que ponga en peligro el cruce"],
+    escenas: ["ceda-vs-alto"],
     ref: ley("Art. 104 inciso g)"),
   },
   {
@@ -58,6 +61,7 @@ export const resumen: TemaEntrada["resumen"] = [
       "De 22:00 a 5:00 el rojo funciona como un ALTO, salvo señal que lo prohíba",
     ],
     multa: "Irrespetar la luz roja (fuera de las excepciones del art. 104): multa categoría B, ¢245 195,06 (2026).",
+    escenas: ["luz-amarilla", "derecha-en-rojo", "rojo-de-noche"],
     ref: ley("Art. 104 incisos a) a e) y art. 144 inciso e)"),
   },
   {
@@ -69,6 +73,7 @@ export const resumen: TemaEntrada["resumen"] = [
       "El giro a la izquierda y la vuelta en U están permitidos, excepto donde el señalamiento horizontal o vertical lo prohíba.",
     ],
     puntosClave: ["Desde la vía principal: el giro a la izquierda pasa antes que los accesos con ALTO", "En los accesos secundarios: recto antes que izquierda"],
+    escenas: ["giro-izquierda-principal"],
     ref: ley("Art. 105 incisos h) e i), art. 121"),
   },
   {
@@ -81,6 +86,7 @@ export const resumen: TemaEntrada["resumen"] = [
     ],
     puntosClave: ["Máximo 30 km/h", "Cede el que entra al que circula dentro", "Sin cambios de carril ni adelantamientos adentro", "1.ª salida: carril derecho · 3.ª o más: carril interno"],
     multa: "Incumplir las reglas de las rotondas: multa categoría D, ¢60 679,58 (2026).",
+    escenas: ["rotonda"],
     ref: ley("Art. 106 y art. 146 inciso d)"),
   },
   {
@@ -91,6 +97,7 @@ export const resumen: TemaEntrada["resumen"] = [
       "Tienen prioridad de paso sobre los demás vehículos siempre que se identifiquen con señales visuales y sonoras y estén atendiendo una emergencia.",
     ],
     puntosClave: ["Con luces y sirena en emergencia: tienen prioridad", "Sin alarmas activadas: son un vehículo más"],
+    escenas: ["ambulancia"],
     ref: ley("Art. 104 inciso h) y art. 105 inciso c)"),
   },
   {
@@ -103,6 +110,7 @@ export const resumen: TemaEntrada["resumen"] = [
     ],
     puntosClave: ["Verde no da permiso para quedar atravesado", "Nunca adelantar en una intersección", "Estacionar: 10 m (urbana) · 25 m (no urbana) · 5 m del paso peatonal"],
     multa: "Entrar a una intersección congestionada y obstruirla: multa categoría D, ¢60 679,58 (2026).",
+    escenas: ["cruce-bloqueado"],
     ref: ley("Art. 128, art. 108 incisos d) y f), art. 110 inciso d), art. 146 inciso r)"),
   },
   {
@@ -114,6 +122,7 @@ export const resumen: TemaEntrada["resumen"] = [
     ],
     puntosClave: ["Con luz verde, al girar a la derecha en rojo o después de un ALTO: ceder al peatón que está en la calzada"],
     multa: "No ceder el paso a peatones donde lo indica el señalamiento: multa categoría E, ¢26 005,53 (2026).",
+    escenas: ["peatones-giro"],
     ref: ley("Art. 104 incisos d) y f), art. 147 inciso j)"),
   },
 ];

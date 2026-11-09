@@ -9,8 +9,8 @@ export default function PaginaFuentes() {
     <div className="mx-auto max-w-3xl space-y-6">
       <h1 className="text-3xl font-extrabold tracking-tight">Fuentes y verificación</h1>
       <p className="text-suave">
-        Cada regla, pregunta y multa del sitio cita el artículo de donde sale. Estas son las fuentes y la fecha en que las revisamos.
-        Si algo cambió, la versión oficial siempre manda.
+        Cada regla, pregunta y multa del sitio cita el artículo del que sale. Esta es la lista de fuentes con la fecha de revisión.
+        Ante cualquier diferencia, vale la versión oficial.
       </p>
       <ul className="space-y-3">
         {FUENTES.map((f) => (
@@ -24,7 +24,7 @@ export default function PaginaFuentes() {
       </ul>
       <p className="rounded-xl bg-aviso-fondo p-4 text-sm">
         El formato del simulacro ({EXAMEN.preguntas} preguntas, {EXAMEN.minutos} minutos, nota mínima {EXAMEN.notaMinima}) se basa en lo publicado por la prensa
-        sobre la prueba teórica. Confirmalo al matricular tu prueba con Educación Vial.
+        sobre la prueba teórica. Conviene confirmarlo con Educación Vial al matricular la prueba.
       </p>
     </div>
   );

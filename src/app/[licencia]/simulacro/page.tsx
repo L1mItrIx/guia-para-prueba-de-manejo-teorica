@@ -7,7 +7,7 @@ import { ProximamenteMoto } from "@/components/ProximamenteMoto";
 
 export const dynamicParams = false;
 export const generateStaticParams = paramsLicencias;
-export const metadata: Metadata = { title: "Simulacro de examen" };
+export const metadata: Metadata = { title: "Simulacro de práctica" };
 
 export default async function PaginaSimulacro({ params }: { params: ParamsLicencia }) {
   const licencia = obtenerLicencia((await params).licencia);
@@ -17,7 +17,7 @@ export default async function PaginaSimulacro({ params }: { params: ParamsLicenc
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <Migas items={[{ href: "/", texto: "Inicio" }, { href: `/${licencia.slug}/`, texto: licencia.nombre }, { texto: "Simulacro" }]} />
-      <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Simulacro de examen — {licencia.nombre}</h1>
+      <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Simulacro de práctica — {licencia.nombre}</h1>
       <Simulacro licencia={licencia.id} banco={banco} />
     </div>
   );

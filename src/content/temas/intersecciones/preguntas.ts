@@ -15,10 +15,10 @@ const multas = (detalle: string) => ({ fuente: "multas-2026", detalle });
 export const preguntas: TemaEntrada["preguntas"] = [
   {
     id: "int-01",
-    enunciado: "Llega a un cruce sin señales y, al mismo tiempo, otro carro se acerca por la calle transversal desde su derecha. Las dos calles son del mismo tipo. ¿Qué corresponde?",
+    enunciado: "Un carro llega a un cruce sin señales y, al mismo tiempo, otro se acerca por la calle transversal desde su derecha. Las dos calles son del mismo tipo. ¿Qué corresponde?",
     opciones: [
       "Ceder el paso al otro carro, porque viene por su derecha",
-      "Pasar usted, porque el que viene por la derecha es quien cede",
+      "Pasar primero, porque el que viene por la derecha es quien cede",
       "Pasar primero el que vaya a seguir recto por el cruce",
       "Detenerse ambos y pasar el que haga primero cambio de luces",
     ],
@@ -26,10 +26,11 @@ export const preguntas: TemaEntrada["preguntas"] = [
     explicacion: "Sin señales y con vías del mismo tipo, el conductor que llega por la izquierda cede el paso al que se encuentra a su derecha. Un error común es pensar que pasa quien sigue recto: esa regla es para los accesos secundarios con ALTO.",
     ref: ley("Art. 105 inciso e)"),
     verificado: V,
+    escena: "sin-senales",
   },
   {
     id: "int-02",
-    enunciado: "Llega a una señal de ALTO. Hay buena visibilidad y por la vía con prioridad no viene ningún vehículo. ¿Qué debe hacer?",
+    enunciado: "Al llegar a una señal de ALTO hay buena visibilidad y por la vía con prioridad no viene ningún vehículo. ¿Qué corresponde hacer?",
     opciones: [
       "Detenerse por completo en la línea de parada y luego avanzar",
       "Reducir a paso de hombre y avanzar sin llegar a detenerse",
@@ -43,12 +44,12 @@ export const preguntas: TemaEntrada["preguntas"] = [
   },
   {
     id: "int-03",
-    enunciado: "Llega a una intersección con señal de CEDA EL PASO. ¿Cuál es la conducta correcta?",
+    enunciado: "Al llegar a una intersección con señal de CEDA EL PASO, ¿cuál es la conducta correcta?",
     opciones: [
       "Reducir, observar y detenerse solo si alguien pone en peligro el cruce",
       "Detenerse por completo en la línea de parada aunque no venga nadie",
-      "Mantener la velocidad, porque la vía transversal debe cederle el paso",
-      "Detenerse únicamente cuando un inspector de tránsito se lo indique",
+      "Mantener la velocidad, porque la vía transversal debe ceder el paso",
+      "Detenerse únicamente cuando un inspector de tránsito lo indique",
     ],
     correcta: 0,
     explicacion: "Con CEDA se disminuye la velocidad para observar el tránsito de las otras vías y se detiene por completo solo si se aproxima un vehículo que por cercanía o rapidez pueda poner en peligro el cruce. La detención obligatoria aunque no venga nadie es la regla del ALTO.",
@@ -57,10 +58,10 @@ export const preguntas: TemaEntrada["preguntas"] = [
   },
   {
     id: "int-04",
-    enunciado: "En un cruce, usted tiene señal de ALTO y el carro de la calle transversal tiene CEDA EL PASO. Llegan casi al mismo tiempo. ¿Quién pasa primero?",
+    enunciado: "En un cruce, un carro tiene señal de ALTO y el de la calle transversal tiene CEDA EL PASO. Llegan casi al mismo tiempo. ¿Quién pasa primero?",
     opciones: [
-      "El carro con CEDA, mientras usted espera detenido en su ALTO",
-      "Usted, porque ya se detuvo por completo en el ALTO",
+      "El carro con CEDA, mientras el otro espera detenido en su ALTO",
+      "El del ALTO, porque ya se detuvo por completo en la línea",
       "El que venga por la derecha del otro, como en un cruce sin señales",
       "El primero que llegue a su línea de parada",
     ],
@@ -68,20 +69,22 @@ export const preguntas: TemaEntrada["preguntas"] = [
     explicacion: "Los vehículos regulados por una señal de CEDA tienen prioridad respecto de los regulados por una señal de ALTO. La regla de la derecha solo se usa cuando no hay ninguna señal.",
     ref: ley("Art. 105 inciso g)"),
     verificado: V,
+    escena: "ceda-vs-alto",
   },
   {
     id: "int-05",
-    enunciado: "Usted viene por una carretera secundaria y llega a una carretera primaria. En el cruce no hay señales y un carro se acerca por la primaria desde su izquierda. ¿Quién tiene prioridad?",
+    enunciado: "Un carro viene por una carretera secundaria y llega a una primaria. En el cruce no hay señales y otro carro se acerca por la primaria desde su izquierda. ¿Quién tiene prioridad?",
     opciones: [
-      "El carro de la primaria, aunque venga por su izquierda",
-      "Usted, porque el otro carro viene por su izquierda",
+      "El carro de la primaria, aunque venga por la izquierda",
+      "El de la secundaria, porque el otro viene por su izquierda",
       "El que llegue primero al cruce, sin importar la vía",
-      "Usted, porque sin señales se aplica la regla de la derecha",
+      "El de la secundaria, porque sin señales rige la regla de la derecha",
     ],
     correcta: 0,
     explicacion: "Quien circula por una carretera primaria tiene prioridad sobre quien viene de una secundaria. La regla de ceder al que viene por la derecha es supletoria: solo se aplica cuando las dos vías son del mismo tipo.",
     ref: ley("Art. 105 incisos d) y e)"),
     verificado: V,
+    escena: "primaria-secundaria",
   },
   {
     id: "int-06",
@@ -113,7 +116,7 @@ export const preguntas: TemaEntrada["preguntas"] = [
   },
   {
     id: "int-08",
-    enunciado: "Son las 3 p. m. Está detenido con luz roja, quiere girar a la derecha y no hay ninguna señal que prohíba ese giro. ¿Qué permite la ley?",
+    enunciado: "Son las 3 p. m. Un carro está detenido con luz roja y quiere girar a la derecha; no hay señal que prohíba ese giro. ¿Qué permite la ley?",
     opciones: [
       "Detenerse, ceder el paso y girar si el tránsito con verde lo permite",
       "Esperar la luz verde: con rojo solo se puede avanzar de 22:00 a 5:00",
@@ -124,10 +127,11 @@ export const preguntas: TemaEntrada["preguntas"] = [
     explicacion: "Con luz roja se puede girar a la derecha como si fuera un cruce con señal fija de ALTO (detenerse y ceder), si el tránsito de la vía con verde lo permite, salvo que haya una señal que lo prohíba. No hace falta una señal que lo autorice. La regla de 22:00 a 5:00 es otra: permite continuar en rojo también para seguir recto.",
     ref: ley("Art. 104 incisos b) y d)"),
     verificado: V,
+    escena: "derecha-en-rojo",
   },
   {
     id: "int-09",
-    enunciado: "Son las 11:30 p. m. Usted va a seguir recto, el semáforo está en rojo, la vía transversal está vacía y no hay señal que lo prohíba. ¿Qué permite la ley?",
+    enunciado: "Son las 11:30 p. m. Un carro va a seguir recto, el semáforo está en rojo, la vía transversal está vacía y no hay señal que lo prohíba. ¿Qué permite la ley?",
     opciones: [
       "Detenerse y continuar como si fuera un cruce con ALTO",
       "Esperar el verde: la excepción nocturna es solo para girar a la derecha",
@@ -138,10 +142,11 @@ export const preguntas: TemaEntrada["preguntas"] = [
     explicacion: "Después de las 22:00 y antes de las 5:00, si el tránsito en la vía con luz verde lo permite, se puede continuar como si se tratara de un cruce con señal fija de ALTO: detenerse por completo y pasar con seguridad, salvo que una señal lo prohíba.",
     ref: ley("Art. 104 inciso c)"),
     verificado: V,
+    escena: "rojo-de-noche",
   },
   {
     id: "int-10",
-    enunciado: "Va a pocos metros de la línea de parada y el semáforo cambia a amarillo. Frenar de golpe lo dejaría dentro del cruce. ¿Qué indica la ley?",
+    enunciado: "Un carro está a pocos metros de la línea de parada cuando el semáforo cambia a amarillo; frenar de golpe lo dejaría dentro del cruce. ¿Qué indica la ley?",
     opciones: [
       "Continuar y despejar la intersección sin exceder el límite",
       "Frenar de inmediato, aunque quede detenido dentro del cruce",
@@ -152,13 +157,14 @@ export const preguntas: TemaEntrada["preguntas"] = [
     explicacion: "La luz amarilla indica desacelerar para detenerse si aún se está lejos; si se está muy cerca del punto de cruce, se debe evacuar la intersección sin exceder los límites de velocidad.",
     ref: ley("Art. 104 inciso e)"),
     verificado: V,
+    escena: "luz-amarilla",
   },
   {
     id: "int-11",
-    enunciado: "Va a entrar a una rotonda y por dentro de ella se acerca otro vehículo. ¿Quién tiene prioridad?",
+    enunciado: "Un carro va a entrar a una rotonda y por dentro se acerca otro vehículo. ¿Quién tiene prioridad?",
     opciones: [
       "El vehículo que ya circula dentro de la rotonda",
-      "Usted, porque llega por la derecha del que circula",
+      "El que entra, porque llega por la derecha del que circula",
       "El que vaya a tomar la salida más cercana",
       "El que circule por el carril externo de la rotonda",
     ],
@@ -166,6 +172,7 @@ export const preguntas: TemaEntrada["preguntas"] = [
     explicacion: "El vehículo que va a ingresar a la rotonda debe ceder el paso al que circula dentro, e ingresar solo cuando la maniobra sea segura. En la rotonda no se aplica la regla de la derecha.",
     ref: ley("Art. 106 inciso b)"),
     verificado: V,
+    escena: "rotonda",
   },
   {
     id: "int-12",
@@ -178,7 +185,7 @@ export const preguntas: TemaEntrada["preguntas"] = [
   },
   {
     id: "int-13",
-    enunciado: "Va a salir de una rotonda de varios carriles por la tercera salida. ¿Dónde debe ubicarse?",
+    enunciado: "Para salir de una rotonda de varios carriles por la tercera salida, ¿dónde hay que ubicarse?",
     opciones: [
       "En el carril interno o extremo izquierdo",
       "En el carril externo derecho, como en la primera salida",
@@ -189,6 +196,7 @@ export const preguntas: TemaEntrada["preguntas"] = [
     explicacion: "Para salir por la tercera salida o una posterior se usa el carril interno o extremo izquierdo; el carril externo derecho es para la primera salida. Dentro de la rotonda no se cambia de carril salvo al entrar y salir.",
     ref: ley("Art. 106 incisos d), f) y h)"),
     verificado: V,
+    escena: "rotonda",
   },
   {
     id: "int-14",
@@ -206,10 +214,10 @@ export const preguntas: TemaEntrada["preguntas"] = [
   },
   {
     id: "int-15",
-    enunciado: "Tiene luz verde, pero el tránsito al otro lado del cruce está detenido y no hay espacio para su carro. ¿Qué debe hacer?",
+    enunciado: "Un carro tiene luz verde, pero el tránsito al otro lado del cruce está detenido y no queda espacio para él. ¿Qué corresponde?",
     opciones: [
       "Esperar antes de la intersección hasta que haya espacio para salir",
-      "Entrar, porque la luz verde le da el derecho de vía",
+      "Entrar, porque la luz verde da el derecho de vía",
       "Entrar hasta la mitad y esperar en el centro del cruce",
       "Entrar solo si el semáforo todavía no ha cambiado a amarillo",
     ],
@@ -217,6 +225,7 @@ export const preguntas: TemaEntrada["preguntas"] = [
     explicacion: "Se prohíbe ingresar a una intersección, aun con luz verde o derecho de vía, si por la congestión se obstruye la libre circulación, así como detenerse en medio de la intersección.",
     ref: ley("Art. 128"),
     verificado: V,
+    escena: "cruce-bloqueado",
   },
   {
     id: "int-16",
@@ -231,6 +240,7 @@ export const preguntas: TemaEntrada["preguntas"] = [
     explicacion: "Los vehículos de emergencia que atienden un incidente con sus alarmas encendidas pueden continuar con luz roja o con ALTO, pero no sin antes verificar que no hay vehículos circulando por las vías que se cruzan.",
     ref: ley("Art. 104 inciso h) y art. 105 inciso c)"),
     verificado: V,
+    escena: "ambulancia",
   },
   {
     id: "int-17",
@@ -243,7 +253,7 @@ export const preguntas: TemaEntrada["preguntas"] = [
   },
   {
     id: "int-18",
-    enunciado: "Va detrás de un carro lento, está por cruzar una intersección y el carril contrario está libre. ¿Puede adelantarlo?",
+    enunciado: "Un carro va detrás de otro más lento, está por cruzar una intersección y el carril contrario está libre. ¿Se puede adelantar?",
     opciones: [
       "No, porque está prohibido adelantar en intersecciones",
       "Sí, si usa la direccional y el carril contrario está libre",
@@ -268,12 +278,13 @@ export const preguntas: TemaEntrada["preguntas"] = [
     explicacion: "En intersecciones con dos accesos secundarios controlados con ALTO, los vehículos que giran a la izquierda desde la vía principal tienen prioridad sobre los que están en esos accesos.",
     ref: ley("Art. 105 inciso h)"),
     verificado: V,
+    escena: "giro-izquierda-principal",
   },
   {
     id: "int-20",
-    enunciado: "Usted está en un acceso secundario con ALTO y va a seguir recto. El carro del acceso de enfrente, también con ALTO, va a girar a la izquierda. Ambos ya se detuvieron. ¿Quién pasa primero?",
+    enunciado: "Desde un acceso secundario con ALTO, un carro va a seguir recto; el del acceso de enfrente, también con ALTO, va a girar a la izquierda. Ambos ya se detuvieron. ¿Quién pasa primero?",
     opciones: [
-      "Usted, porque sigue recto por el acceso secundario",
+      "El que sigue recto por su acceso secundario",
       "El que se haya detenido primero en su ALTO",
       "El que gira, porque ya tiene la direccional puesta",
     ],
@@ -281,6 +292,7 @@ export const preguntas: TemaEntrada["preguntas"] = [
     explicacion: "Los vehículos que continúan directo por los accesos secundarios tienen prioridad sobre los que giran a la izquierda desde esos mismos accesos.",
     ref: ley("Art. 105 inciso i)"),
     verificado: V,
+    escena: "giro-izquierda-principal",
   },
   {
     id: "int-21",
@@ -293,7 +305,7 @@ export const preguntas: TemaEntrada["preguntas"] = [
   },
   {
     id: "int-22",
-    enunciado: "Con luz verde gira a la derecha y en la calle a la que entra hay peatones cruzando la calzada. ¿Qué debe hacer?",
+    enunciado: "Con luz verde, un carro gira a la derecha y en la calle a la que entra hay peatones cruzando la calzada. ¿Qué corresponde?",
     opciones: [
       "Esperar a que los peatones terminen de cruzar la calzada",
       "Pasar primero, porque la luz verde es para los vehículos",
@@ -304,5 +316,6 @@ export const preguntas: TemaEntrada["preguntas"] = [
     explicacion: "Cuando la luz verde da el derecho de paso, o al girar a la derecha en rojo, el conductor debe ceder el paso a todos los peatones y ciclistas que se encuentren sobre la calzada.",
     ref: ley("Art. 104 inciso d)"),
     verificado: V,
+    escena: "peatones-giro",
   },
 ];

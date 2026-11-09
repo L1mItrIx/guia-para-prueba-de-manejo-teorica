@@ -14,11 +14,25 @@ Si una animación no ayuda a entender algo, no se agrega.
 |---|---|
 | Lienzo base reutilizable (luces, cámara, fallback) | `src/components/three/Canvas3D.tsx` |
 | Piezas reutilizables (calle, carro, señal, semáforo) | `src/components/three/piezas/*.tsx` |
-| Escenas de un tema | `src/components/three/escenas/<NombreEscena>.tsx` |
-| Datos de los escenarios (qué pasa, orden correcto, explicación) | `src/content/temas/<slug>/escenarios.ts` (NUNCA dentro del componente) |
+| Componente que dibuja y anima cualquier escena | `src/components/three/escenas/EscenaAnimada.tsx` |
+| Envoltorio para usarla en una página (carga diferida, en pantalla, turnos) | `src/components/three/escenas/EscenaEmbebida.tsx` |
+| Datos de cada escena (vehículos, señales, línea de tiempo, explicación) | `src/content/temas/<slug>/escenas.ts` (NUNCA dentro del componente) |
+| Lógica pura: recorridos, rotonda, línea de tiempo, modelo | `src/lib/rutas.ts`, `rutas-rotonda.ts`, `lineaTiempo.ts`, `modeloEscena.ts` (con tests) |
 | Modelos GLB (si de verdad hacen falta) | `public/models/*.glb` comprimidos (Draco/Meshopt) |
 
-Plantilla de escena nueva: `references/plantilla-escena.tsx` — cópiala y adapta.
+Plantilla de escena nueva (son **datos**): `references/plantilla-escena.ts`.
+
+### Escenas dentro de los modos de estudio
+
+No hay una sección 3D aparte: las animaciones viven dentro del **resumen** (modo `demostracion`, con botón
+Reproducir/Repetir), del **quiz** (modo `pregunta`: muestra la situación sin revelar nada y anima la solución al
+responder) y de las **flashcards** (al voltear, modo `demostracion` con `auto`). Siempre con `EscenaEmbebida`.
+
+- Tipos: `cruce` (señales, semáforos con luz que cambia, peatones, vía primaria/secundaria, noche) y `rotonda`.
+- Línea de tiempo: `mover` (hasta `parada` o `fin`), `peatones`, `semaforo`, `pausa`; o el atajo `orden`.
+- Los vehículos que empiezan atrás (`inicio` negativo) deben quedar dentro de cámara: entre -10 y 0 m.
+- **Máximo 2 canvas WebGL vivos** (`useTurnoCanvas`): la escena que entra en pantalla toma el turno de la más
+  antigua; las demás muestran un póster. Una sección con varias escenas muestra una a la vez (pestañas).
 
 ## 2. Reglas obligatorias
 
@@ -68,7 +82,8 @@ Plantilla de escena nueva: `references/plantilla-escena.tsx` — cópiala y adap
 - [ ] Funciona sin WebGL (texto alternativo visible).
 - [ ] Hay botones HTML para todas las acciones; se puede usar solo con teclado.
 - [ ] `prefers-reduced-motion` probado (DevTools → Rendering → Emulate).
-- [ ] Datos del escenario en `content/`, con `fuente` y explicación.
+- [ ] Datos de la escena en `content/`, con `fuente` y explicación, y enlazada desde al menos un modo.
+- [ ] Capturas de inicio, mitad y final de la animación revisadas (que se vea quién espera y quién pasa).
 - [ ] Probada en viewport de móvil (390×844) sin scroll horizontal.
 - [ ] `npm run build` pasa y el smoke test e2e monta el canvas.
 - [ ] Anotado en `docs/PROGRESO.md` (skill `progreso-proyecto`).

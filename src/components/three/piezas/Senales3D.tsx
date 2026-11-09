@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import type { Control, Direccion } from "@/content/schema";
+import type { Control, Direccion, Luz } from "@/content/schema";
 import { BORDE_CRUCE, CARRIL } from "@/lib/rutas";
 
 /** Textura con texto dibujado en un canvas (sin descargar fuentes). */
@@ -98,12 +99,25 @@ function PlacaTexto({ tipo }: { tipo: "alto" | "ceda" }) {
   );
 }
 
-function Semaforo({ luz }: { luz: "rojo" | "verde" }) {
-  const colores = [
-    ["#e53935", luz === "rojo"],
-    ["#fdd835", false],
-    ["#43a047", luz === "verde"],
-  ] as const;
+const COLORES: [Luz, string][] = [
+  ["rojo", "#e53935"],
+  ["amarillo", "#fdd835"],
+  ["verde", "#43a047"],
+];
+
+/** Semáforo cuya luz se lee de la línea de tiempo en cada cuadro. */
+export function Semaforo3D({ obtenerLuz }: { obtenerLuz: () => Luz | undefined }) {
+  const mats = useRef<(THREE.MeshStandardMaterial | null)[]>([]);
+  useFrame(() => {
+    const luz = obtenerLuz();
+    COLORES.forEach(([nombre], k) => {
+      const m = mats.current[k];
+      if (!m) return;
+      const on = nombre === luz;
+      m.emissiveIntensity = on ? 2.4 : 0;
+      m.opacity = on ? 1 : 0.28;
+    });
+  });
   return (
     <group>
       <Poste altura={3.2} />
@@ -111,41 +125,47 @@ function Semaforo({ luz }: { luz: "rojo" | "verde" }) {
         <boxGeometry args={[0.5, 1.3, 0.35]} />
         <meshStandardMaterial color="#1d1f24" />
       </mesh>
-      {colores.map(([c, encendida], k) => (
-        <mesh key={c} position={[0, 4.0 - k * 0.4, 0.18]}>
+      {COLORES.map(([nombre, c], k) => (
+        <mesh key={nombre} position={[0, 4.0 - k * 0.4, 0.18]}>
           <sphereGeometry args={[0.14, 16, 12]} />
-          <meshStandardMaterial color={c} emissive={c} emissiveIntensity={encendida ? 2.2 : 0} opacity={encendida ? 1 : 0.3} transparent />
+          <meshStandardMaterial ref={(m) => void (mats.current[k] = m)} color={c} emissive={c} emissiveIntensity={0} opacity={0.28} transparent />
         </mesh>
       ))}
     </group>
   );
 }
 
-/** Coloca la señal o semáforo de cada acceso, mirando al conductor que llega. */
-export function Senales3D({ controles }: { controles: Partial<Record<Direccion, Control>> }) {
+/** Señal fija (ALTO o CEDA) sobre su poste. */
+export function SenalFija({ tipo }: { tipo: "alto" | "ceda" }) {
+  return (
+    <>
+      <Poste />
+      <PlacaTexto tipo={tipo} />
+    </>
+  );
+}
+
+/** Coloca la señal o semáforo de cada acceso del cruce, mirando al conductor que llega. */
+export function Senales3D({
+  controles,
+  obtenerLuz,
+}: {
+  controles: Partial<Record<Direccion, Control>>;
+  obtenerLuz: (d: Direccion) => Luz | undefined;
+}) {
   return (
     <group>
       {(Object.entries(controles) as [Direccion, Control][]).map(([d, c]) => {
         if (c === "ninguno") return null;
         return (
           <group key={d} position={posicionPoste(d)} rotation-y={ROT[d]}>
-            {c === "alto" && (
-              <>
-                <Poste />
-                <PlacaTexto tipo="alto" />
-              </>
-            )}
-            {c === "ceda" && (
-              <>
-                <Poste />
-                <PlacaTexto tipo="ceda" />
-              </>
-            )}
-            {c === "semaforo-rojo" && <Semaforo luz="rojo" />}
-            {c === "semaforo-verde" && <Semaforo luz="verde" />}
+            {(c === "alto" || c === "ceda") && <SenalFija tipo={c} />}
+            {c.startsWith("semaforo") && <Semaforo3D obtenerLuz={() => obtenerLuz(d)} />}
           </group>
         );
       })}
     </group>
   );
 }
+
+export { ROT as ROTACION_ACCESO };

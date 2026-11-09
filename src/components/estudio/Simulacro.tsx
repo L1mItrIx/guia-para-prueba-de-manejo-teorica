@@ -8,6 +8,7 @@ import { calificar, formatoTiempo } from "@/lib/calificar";
 import { useProgreso } from "@/store/progreso";
 import { Boton } from "@/components/ui/Boton";
 import { RefFuente } from "@/components/ui/RefFuente";
+import { IconoReloj } from "@/components/ui/Iconos";
 
 type Item = Pregunta & { orden: string[]; correctaBarajada: number };
 const LETRAS = ["A", "B", "C", "D"];
@@ -67,18 +68,19 @@ export function Simulacro({ licencia, banco }: { licencia: LicenciaId; banco: Pr
   if (!items) {
     return (
       <div className="space-y-4 rounded-2xl border border-borde bg-superficie p-6">
-        <ul className="space-y-1">
-          <li>📝 <strong>{cantidad}</strong> preguntas de selección única</li>
-          <li>⏱️ <strong>{EXAMEN.minutos}</strong> minutos</li>
-          <li>🎯 Se aprueba con <strong>{EXAMEN.notaMinima}</strong></li>
-          <li>🔇 No verás si acertaste hasta entregar, igual que en el examen real</li>
+        <ul className="list-disc space-y-1 pl-5">
+          <li><strong>{cantidad}</strong> preguntas de selección única</li>
+          <li><strong>{EXAMEN.minutos}</strong> minutos</li>
+          <li>Nota mínima: <strong>{EXAMEN.notaMinima}</strong></li>
+          <li>Las respuestas correctas se muestran al entregar</li>
         </ul>
+        <p className="text-sm text-suave">Es una práctica con el formato que se ha informado para la prueba teórica. La prueba oficial la aplica la Dirección General de Educación Vial.</p>
         {cantidad < EXAMEN.preguntas && (
           <p className="rounded-xl bg-aviso-fondo p-3 text-sm">
-            El examen real tiene {EXAMEN.preguntas} preguntas. Por ahora el banco del sitio tiene {banco.length} preguntas verificadas; el simulacro crecerá con cada tema nuevo.
+            La prueba tiene {EXAMEN.preguntas} preguntas. Por ahora el banco del sitio tiene {banco.length} preguntas verificadas; el simulacro crece con cada tema nuevo.
           </p>
         )}
-        <Boton onClick={empezar}>Empezar simulacro</Boton>
+        <Boton onClick={empezar}>Empezar el simulacro</Boton>
       </div>
     );
   }
@@ -87,9 +89,9 @@ export function Simulacro({ licencia, banco }: { licencia: LicenciaId; banco: Pr
     return (
       <div className="space-y-6">
         <div className={`rounded-2xl p-6 ${resultado.aprobado ? "bg-exito-fondo" : "bg-error-fondo"}`} role="status">
-          <p className="text-sm font-semibold uppercase tracking-wide">{resultado.aprobado ? "Aprobado" : "Reprobado"}</p>
+          <p className="text-sm font-semibold uppercase tracking-wide">{resultado.aprobado ? "Aprobado" : "No aprobado"}</p>
           <p className="text-5xl font-extrabold" data-testid="nota-simulacro">{resultado.nota}</p>
-          <p>{resultado.correctas} de {resultado.total} correctas · nota mínima {EXAMEN.notaMinima}</p>
+          <p>{resultado.correctas} de {resultado.total} correctas · nota mínima: {EXAMEN.notaMinima}</p>
         </div>
         <section className="space-y-3">
           <h2 className="text-xl font-bold">Revisión</h2>
@@ -101,7 +103,7 @@ export function Simulacro({ licencia, banco }: { licencia: LicenciaId; banco: Pr
                   {bien ? "✔" : "✘"} {k + 1}. {it.enunciado}
                 </summary>
                 <div className="mt-3 space-y-2 text-sm">
-                  {respuestas[k] !== null && !bien && <p><span className="font-semibold text-error">Tu respuesta:</span> {it.orden[respuestas[k]!]}</p>}
+                  {respuestas[k] !== null && !bien && <p><span className="font-semibold text-error">Respuesta elegida:</span> {it.orden[respuestas[k]!]}</p>}
                   {respuestas[k] === null && <p className="text-error">Sin responder</p>}
                   <p><span className="font-semibold text-exito">Correcta:</span> {it.orden[it.correctaBarajada]}</p>
                   <p className="text-suave">{it.explicacion}</p>
@@ -122,8 +124,8 @@ export function Simulacro({ licencia, banco }: { licencia: LicenciaId; banco: Pr
     <div className="space-y-4">
       <div className="sticky top-14 z-30 flex items-center justify-between rounded-xl border border-borde bg-superficie px-4 py-2 shadow-sm">
         <span className="text-sm">{contestadas}/{items.length} respondidas</span>
-        <span className={`font-mono text-lg font-bold ${restante < 300 ? "text-error" : ""}`} aria-live="off" aria-label={`Tiempo restante ${formatoTiempo(restante)}`}>
-          ⏱ {formatoTiempo(restante)}
+        <span className={`flex items-center gap-1.5 font-mono text-lg font-bold tabular-nums ${restante < 300 ? "text-error" : ""}`} aria-live="off" aria-label={`Tiempo restante ${formatoTiempo(restante)}`} data-testid="cronometro">
+          <IconoReloj /> {formatoTiempo(restante)}
         </span>
       </div>
       <div className="space-y-4 rounded-2xl border border-borde bg-superficie p-5">

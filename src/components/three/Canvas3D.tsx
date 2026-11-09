@@ -40,22 +40,31 @@ export function Canvas3D({
   animando = false,
   etiqueta,
   camara = CAMARA_BASE,
+  noche = false,
+  className = "h-[min(62vh,520px)] min-h-72",
 }: {
   children: ReactNode;
   alternativa: ReactNode;
   animando?: boolean;
   etiqueta: string;
   camara?: [number, number, number];
+  noche?: boolean;
+  className?: string;
 }) {
   const [webgl, setWebgl] = useState<boolean | null>(null);
   useEffect(() => setWebgl(hayWebGL()), []);
 
   if (webgl === false) {
-    return <div className="rounded-2xl border border-borde bg-superficie-2 p-4 text-sm">{alternativa}</div>;
+    return <div className="rounded-2xl border border-borde bg-superficie-2 p-4 text-sm" data-testid="sin-webgl">{alternativa}</div>;
   }
 
   return (
-    <div className="relative h-[min(62vh,520px)] min-h-72 w-full overflow-hidden rounded-2xl bg-[#bfe3f5] dark:bg-[#1b2b40]" role="img" aria-label={etiqueta} data-testid="canvas-3d">
+    <div
+      className={`relative w-full overflow-hidden rounded-2xl ${noche ? "bg-[#0e1630]" : "bg-[#bfe3f5] dark:bg-[#1b2b40]"} ${className}`}
+      role="img"
+      aria-label={etiqueta}
+      data-testid="canvas-3d"
+    >
       {webgl && (
         <Canvas
           shadows
@@ -66,8 +75,8 @@ export function Canvas3D({
         >
           <AjustarCamara base={camara} />
           <Suspense fallback={null}>
-            <hemisphereLight args={["#ffffff", "#7a8b6f", 0.9]} />
-            <directionalLight position={[12, 24, 10]} intensity={1.4} castShadow shadow-mapSize={[1024, 1024]} shadow-camera-left={-25} shadow-camera-right={25} shadow-camera-top={25} shadow-camera-bottom={-25} />
+            <hemisphereLight args={[noche ? "#9fb0ff" : "#ffffff", "#7a8b6f", noche ? 0.75 : 0.9]} />
+            <directionalLight position={[12, 24, 10]} intensity={noche ? 0.6 : 1.4} castShadow shadow-mapSize={[1024, 1024]} shadow-camera-left={-25} shadow-camera-right={25} shadow-camera-top={25} shadow-camera-bottom={-25} />
             {children}
           </Suspense>
           <OrbitControls

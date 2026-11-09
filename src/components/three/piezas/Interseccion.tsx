@@ -2,12 +2,52 @@
 
 import { BORDE_CRUCE, CARRIL, LARGO_CALLE, LINEA_PARADA } from "@/lib/rutas";
 import type { Direccion } from "@/content/schema";
+import { DIST_PASO_PEATONAL } from "./Peaton3D";
 
 const ANCHO = CARRIL * 2;
 const LARGO = LARGO_CALLE * 2 + 10;
 
 /** Cruce de dos calles de doble sentido. Norte = -z. */
-export function Interseccion({ lineasParada = [] }: { lineasParada?: Direccion[] }) {
+const ASFALTO = "#3d4048";
+const ASFALTO_SECUNDARIA = "#5f6370";
+const BRAZO: Record<Direccion, { pos: [number, number]; rot: number }> = {
+  norte: { pos: [0, -(BORDE_CRUCE + LARGO_CALLE / 2)], rot: 0 },
+  sur: { pos: [0, BORDE_CRUCE + LARGO_CALLE / 2], rot: 0 },
+  este: { pos: [BORDE_CRUCE + LARGO_CALLE / 2, 0], rot: Math.PI / 2 },
+  oeste: { pos: [-(BORDE_CRUCE + LARGO_CALLE / 2), 0], rot: Math.PI / 2 },
+};
+
+/** Franjas de un paso peatonal (cebra) sobre el brazo `d`. */
+function PasoPeatonal({ d }: { d: Direccion }) {
+  const franjas = 7;
+  const vertical = d === "norte" || d === "sur";
+  const signo = d === "sur" || d === "este" ? 1 : -1;
+  return (
+    <group>
+      {Array.from({ length: franjas }, (_, k) => {
+        const off = -CARRIL + 0.5 + (k * (2 * CARRIL - 1)) / (franjas - 1);
+        const x = vertical ? off : signo * DIST_PASO_PEATONAL;
+        const z = vertical ? signo * DIST_PASO_PEATONAL : off;
+        return (
+          <mesh key={k} rotation-x={-Math.PI / 2} position={[x, 0.013, z]}>
+            <planeGeometry args={vertical ? [0.5, 1.5] : [1.5, 0.5]} />
+            <meshBasicMaterial color="#f4f4f4" />
+          </mesh>
+        );
+      })}
+    </group>
+  );
+}
+
+export function Interseccion({
+  lineasParada = [],
+  tipoVia = {},
+  pasosPeatonales = [],
+}: {
+  lineasParada?: Direccion[];
+  tipoVia?: Partial<Record<Direccion, "primaria" | "secundaria">>;
+  pasosPeatonales?: Direccion[];
+}) {
   return (
     <group>
       {/* Zacate */}
@@ -15,15 +55,20 @@ export function Interseccion({ lineasParada = [] }: { lineasParada?: Direccion[]
         <planeGeometry args={[LARGO, LARGO]} />
         <meshStandardMaterial color="#7fb069" />
       </mesh>
-      {/* Calles */}
+      {/* Calles: cuadro central + cuatro brazos (las vías secundarias, más claras) */}
       <mesh rotation-x={-Math.PI / 2} receiveShadow>
-        <planeGeometry args={[ANCHO, LARGO]} />
-        <meshStandardMaterial color="#3d4048" />
+        <planeGeometry args={[ANCHO, ANCHO]} />
+        <meshStandardMaterial color={ASFALTO} />
       </mesh>
-      <mesh rotation-x={-Math.PI / 2} position-y={0.001} receiveShadow>
-        <planeGeometry args={[LARGO, ANCHO]} />
-        <meshStandardMaterial color="#3d4048" />
-      </mesh>
+      {(Object.keys(BRAZO) as Direccion[]).map((d) => (
+        <mesh key={d} rotation={[-Math.PI / 2, 0, BRAZO[d].rot]} position={[BRAZO[d].pos[0], 0.001, BRAZO[d].pos[1]]} receiveShadow>
+          <planeGeometry args={[ANCHO, LARGO_CALLE]} />
+          <meshStandardMaterial color={tipoVia[d] === "secundaria" ? ASFALTO_SECUNDARIA : ASFALTO} />
+        </mesh>
+      ))}
+      {pasosPeatonales.map((d) => (
+        <PasoPeatonal key={d} d={d} />
+      ))}
       {/* Aceras en las esquinas */}
       {[
         [1, 1],

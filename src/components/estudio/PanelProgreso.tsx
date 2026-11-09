@@ -8,7 +8,7 @@ import { BarraProgreso } from "@/components/ui/BarraProgreso";
 import { Boton } from "@/components/ui/Boton";
 import { EXAMEN } from "@/content/examen";
 
-export type ResumenTema = { slug: string; titulo: string; href: string; flashcards: string[]; escenarios: string[] };
+export type ResumenTema = { slug: string; titulo: string; href: string; flashcards: string[]; escenas: string[] };
 
 export function PanelProgreso({ temas }: { temas: ResumenTema[] }) {
   const hidratado = useHidratado();
@@ -17,7 +17,7 @@ export function PanelProgreso({ temas }: { temas: ResumenTema[] }) {
 
   const ultimo = s.simulacros[0];
   const reiniciar = () => {
-    if (window.confirm("¿Borrar todo tu progreso guardado en este navegador?")) s.reiniciar();
+    if (window.confirm("¿Borrar todo el progreso guardado en este navegador?")) s.reiniciar();
   };
 
   return (
@@ -26,7 +26,7 @@ export function PanelProgreso({ temas }: { temas: ResumenTema[] }) {
         <div className="rounded-2xl bg-superficie p-5">
           <p className="text-sm text-suave">Último simulacro</p>
           <p className="text-3xl font-extrabold">{ultimo ? ultimo.nota : "—"}</p>
-          {ultimo && <p className={`text-sm font-semibold ${ultimo.aprobado ? "text-exito" : "text-error"}`}>{ultimo.aprobado ? "Aprobado" : "Reprobado"}</p>}
+          {ultimo && <p className={`text-sm font-semibold ${ultimo.aprobado ? "text-exito" : "text-error"}`}>{ultimo.aprobado ? "Aprobado" : "No aprobado"}</p>}
         </div>
         <div className="rounded-2xl bg-superficie p-5">
           <p className="text-sm text-suave">Simulacros aprobados</p>
@@ -42,23 +42,22 @@ export function PanelProgreso({ temas }: { temas: ResumenTema[] }) {
       <section className="space-y-3">
         <h2 className="text-xl font-bold">Por tema</h2>
         {temas.map((t) => {
-          const resueltos = t.escenarios.filter((id) => s.escenarios[id]).length;
+          const vistas = t.escenas.filter((id) => s.escenas[id]).length;
           return (
             <div key={t.slug} className="space-y-3 rounded-2xl border border-borde bg-superficie p-5">
               <Link href={t.href} className="font-bold hover:text-primario">{t.titulo}</Link>
               <BarraProgreso etiqueta="Mejor nota en el quiz" valor={s.quizzes[t.slug]?.mejorNota ?? 0} />
               <BarraProgreso etiqueta="Flashcards dominadas" valor={dominio(t.flashcards, s.flashcards)} />
-              {t.escenarios.length > 0 && <BarraProgreso etiqueta={`Escenas 3D resueltas (${resueltos}/${t.escenarios.length})`} valor={(resueltos / t.escenarios.length) * 100} />}
-              <p className="text-sm text-suave">Presentación: {s.presentaciones[t.slug] ? "vista completa ✔" : "pendiente"}</p>
+              {t.escenas.length > 0 && <BarraProgreso etiqueta={`Animaciones vistas (${vistas} de ${t.escenas.length})`} valor={(vistas / t.escenas.length) * 100} />}
             </div>
           );
         })}
       </section>
 
       <section className="space-y-2 rounded-2xl border border-borde p-5">
-        <h2 className="font-bold">Tus datos</h2>
-        <p className="text-sm text-suave">El progreso se guarda solo en este navegador (no hay cuentas ni servidores). Si borrás los datos del navegador o usás otro dispositivo, empezás de cero.</p>
-        <Boton variante="secundario" onClick={reiniciar}>Borrar mi progreso</Boton>
+        <h2 className="font-bold">Datos guardados</h2>
+        <p className="text-sm text-suave">El progreso se guarda solo en este navegador: no hay cuentas ni servidores. Al borrar los datos del navegador o al usar otro dispositivo, el progreso empieza de cero.</p>
+        <Boton variante="secundario" onClick={reiniciar}>Borrar el progreso</Boton>
       </section>
     </div>
   );

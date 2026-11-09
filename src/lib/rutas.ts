@@ -103,3 +103,35 @@ export function posicionEnRuta(puntos: readonly V2[], t: number): { x: number; z
 export function anguloDeRumbo(h: V2): number {
   return Math.atan2(-h.x, -h.z);
 }
+
+/* ───────── Recorridos medidos en metros (para la línea de tiempo) ───────── */
+
+/** Metros que se dibujan antes de la línea de parada (permite vehículos que llegan desde atrás). */
+export const ATRAS = 20;
+
+export type Recorrido = { puntos: V2[]; largo: number; sParada: number; en: (s: number) => { x: number; z: number; angulo: number } };
+
+/** Recorrido medido en metros sobre una polilínea. */
+export function crearRecorrido(puntos: V2[], sParada: number): Recorrido {
+  const acc = [0];
+  for (let i = 1; i < puntos.length; i++) acc.push(acc[i - 1] + Math.hypot(puntos[i].x - puntos[i - 1].x, puntos[i].z - puntos[i - 1].z));
+  const largo = acc[acc.length - 1];
+  const en = (sRaw: number) => {
+    const s = Math.min(Math.max(sRaw, 0), largo);
+    let i = 1;
+    while (i < acc.length - 1 && acc[i] < s) i++;
+    const a = puntos[i - 1];
+    const b = puntos[i];
+    const f = (s - acc[i - 1]) / (acc[i] - acc[i - 1] || 1);
+    return { x: a.x + (b.x - a.x) * f, z: a.z + (b.z - a.z) * f, angulo: anguloDeRumbo({ x: b.x - a.x, z: b.z - a.z }) };
+  };
+  return { puntos, largo, sParada, en };
+}
+
+/** Recorrido de un vehículo en un cruce: empieza ATRAS metros antes de su línea de parada (sParada = ATRAS). */
+export function recorridoCruce(desde: Direccion, maniobra: Maniobra, fin = SALIDA): Recorrido {
+  const h = rumboDesde(desde);
+  const espera = posicionDeEspera(desde);
+  const inicio = { x: espera.x - h.x * ATRAS, z: espera.z - h.z * ATRAS };
+  return crearRecorrido([inicio, ...rutaVehiculo(desde, maniobra, fin)], ATRAS);
+}

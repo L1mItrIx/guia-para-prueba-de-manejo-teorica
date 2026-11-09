@@ -3,7 +3,7 @@
 **Sitio:** https://l1mitrix.github.io/guia-para-prueba-de-manejo-teorica/
 
 Web gratuita y sin cuentas para preparar la **prueba teórica de manejo de Costa Rica** (2026):
-resúmenes, quizzes, flashcards, presentaciones, **escenas 3D interactivas** y simulacro de examen.
+resumen, quiz o flashcards (cada uno con **animaciones 3D** de las situaciones) y un simulacro de práctica.
 Al entrar se elige **Carro (B1)** o **Moto (A)** — moto está en preparación.
 
 Todo el contenido cita su fuente (Ley de Tránsito N.º 9078 y multas vigentes desde enero de 2026).

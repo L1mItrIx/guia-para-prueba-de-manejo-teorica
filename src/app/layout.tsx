@@ -4,9 +4,9 @@ import "./globals.css";
 import { ProveedorProgreso } from "@/components/ProveedorProgreso";
 
 export const metadata: Metadata = {
-  title: { default: "Teórico CR — Prepárate para la prueba teórica de manejo 2026", template: "%s · Teórico CR" },
+  title: { default: "Teórico CR — Guía para la prueba teórica de manejo", template: "%s · Teórico CR" },
   description:
-    "Estudia gratis para la prueba teórica de manejo de Costa Rica: resúmenes, quizzes, flashcards, presentaciones, escenas 3D y simulacro, con la Ley de Tránsito 9078 y las multas vigentes en 2026.",
+    "Material gratuito para preparar la prueba teórica de manejo de Costa Rica: resúmenes, quizzes y flashcards con animaciones 3D y un simulacro de práctica, basados en la Ley de Tránsito 9078 y las multas vigentes en 2026.",
 };
 
 export const viewport: Viewport = {
@@ -39,7 +39,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               </Link>
               <nav aria-label="Principal" className="flex items-center gap-1 text-sm font-medium">
                 <Link href="/carro/" className="rounded-lg px-3 py-2 hover:bg-superficie-2">Temas</Link>
-                <Link href="/progreso/" className="rounded-lg px-3 py-2 hover:bg-superficie-2">Mi progreso</Link>
+                <Link href="/progreso/" className="rounded-lg px-3 py-2 hover:bg-superficie-2">Progreso</Link>
               </nav>
             </div>
           </header>
@@ -54,7 +54,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               </p>
               <p>
                 <Link href="/fuentes/" className="underline underline-offset-2 hover:text-primario">Fuentes y fecha de verificación</Link>
-                {" · "}Tu progreso se guarda solo en este navegador: no hay cuentas.
+                {" · "}El progreso se guarda solo en este navegador; no hay cuentas.
               </p>
             </div>
           </footer>

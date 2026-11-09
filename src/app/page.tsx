@@ -27,16 +27,16 @@ export default function Inicio() {
   return (
     <div className="space-y-10">
       <section className="space-y-4">
-        <p className="inline-block rounded-full bg-aviso-fondo px-3 py-1 text-xs font-semibold">Actualizado a 2026 · Gratis · Sin cuentas</p>
-        <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl">Pasá la prueba teórica de manejo a la primera</h1>
+        <p className="inline-block rounded-full bg-aviso-fondo px-3 py-1 text-xs font-semibold">Contenido revisado en 2026 · Gratis · Sin registro</p>
+        <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl">Guía para la prueba teórica de manejo</h1>
         <p className="max-w-2xl text-lg text-suave">
-          Resúmenes, quizzes, flashcards, presentaciones y escenas 3D interactivas con la Ley de Tránsito vigente en Costa Rica.
-          Practicá con un simulacro de {EXAMEN.preguntas} preguntas: se aprueba con {EXAMEN.notaMinima}.
+          Material de estudio basado en la Ley de Tránsito vigente en Costa Rica: resúmenes, quizzes y flashcards con
+          animaciones 3D de cada situación, y un simulacro de práctica de {EXAMEN.preguntas} preguntas.
         </p>
       </section>
 
       <section aria-labelledby="elige" className="space-y-4">
-        <h2 id="elige" className="text-xl font-bold">¿Para qué licencia te estás preparando?</h2>
+        <h2 id="elige" className="text-xl font-bold">Tipo de licencia</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           {LICENCIAS.map((l) => {
             const contenido = (
@@ -53,7 +53,7 @@ export default function Inicio() {
             return l.disponible ? (
               <Link key={l.id} href={`/${l.slug}/`} className={`${clases} border-primario bg-superficie hover:shadow-lg`} data-licencia={l.slug}>
                 {contenido}
-                <span className="mt-2 font-semibold text-primario">Empezar →</span>
+                <span className="mt-2 font-semibold text-primario">Ver temas →</span>
               </Link>
             ) : (
               <div key={l.id} className={`${clases} border-dashed border-borde bg-superficie-2`} aria-disabled="true" data-licencia={l.slug}>
@@ -66,9 +66,9 @@ export default function Inicio() {
 
       <section className="grid gap-4 sm:grid-cols-3">
         {[
-          ["45,9 %", "de quienes se matricularon aprobó el teórico de carro con los manuales nuevos (DGEV, junio 2026)."],
-          ["70", "es la nota mínima para aprobar. Practicá hasta superarla con margen."],
-          ["0 cuentas", "Tu progreso se guarda en tu navegador. Nadie te pide datos."],
+          ["45,9 %", "de quienes se matricularon aprobó la prueba teórica de carro con los manuales de 2026 (Educación Vial, junio de 2026)."],
+          ["70", "es la nota mínima. Conviene practicar hasta superarla con margen."],
+          ["Sin registro", "El progreso queda guardado en este navegador; no se piden datos personales."],
         ].map(([dato, texto]) => (
           <div key={dato} className="rounded-2xl bg-superficie p-5">
             <p className="text-3xl font-extrabold text-primario">{dato}</p>

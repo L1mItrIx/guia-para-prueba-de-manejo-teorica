@@ -19,11 +19,12 @@ export type Fila = {
   fuente: string;
   detalle: string;
   verificado: string;
+  escena: string; // id de la escena animada (opcional)
 };
 
 export const COLUMNAS: (keyof Fila)[] = [
   "tema", "id", "enunciado", "opcion_a", "opcion_b", "opcion_c", "opcion_d",
-  "correcta", "explicacion", "fuente", "detalle", "verificado",
+  "correcta", "explicacion", "fuente", "detalle", "verificado", "escena",
 ];
 
 export function filaDesdePregunta(tema: string, p: TPregunta): Fila {
@@ -41,6 +42,7 @@ export function filaDesdePregunta(tema: string, p: TPregunta): Fila {
     fuente: p.ref.fuente,
     detalle: p.ref.detalle,
     verificado: p.verificado,
+    escena: p.escena ?? "",
   };
 }
 
@@ -73,6 +75,7 @@ export function preguntasDesdeFilas(filas: Partial<Fila>[]): { porTema: Map<stri
       explicacion: limpiar(f.explicacion),
       ref: { fuente: limpiar(f.fuente), detalle: limpiar(f.detalle) },
       verificado: limpiar(f.verificado) || "pendiente",
+      ...(limpiar(f.escena) ? { escena: limpiar(f.escena) } : {}),
     });
     if (!r.success) {
       return void errores.push({ fila: n, id, mensaje: r.error.issues.map((i) => `${i.path.join(".") || "pregunta"}: ${i.message}`).join("; ") });
@@ -118,13 +121,13 @@ export function revisarCalidad(preguntas: { tema: string; p: TPregunta }[], fuen
       avisos.push({
         id: p.id,
         tipo: "Pista por largo",
-        detalle: `La correcta mide ${largos[p.correcta]} caracteres y los distractores ${Math.round(promedio)} en promedio (máx. ×${UMBRAL_LARGO}); emparejá los largos.`,
+        detalle: `La correcta mide ${largos[p.correcta]} caracteres y los distractores ${Math.round(promedio)} en promedio (máx. ×${UMBRAL_LARGO}); emparejar los largos.`,
       });
     }
     const claveEnunciado = palabrasClave(p.enunciado);
     const compartidas = p.opciones.map((o) => [...palabrasClave(o)].filter((w) => claveEnunciado.has(w)).length);
     if (compartidas[p.correcta] >= 2 && compartidas.every((n, i) => i === p.correcta || n === 0)) {
-      avisos.push({ id: p.id, tipo: "Pista por eco", detalle: "Solo la correcta repite palabras del enunciado; usalas también en algún distractor." });
+      avisos.push({ id: p.id, tipo: "Pista por eco", detalle: "Solo la correcta repite palabras del enunciado; usarlas también en algún distractor." });
     }
     p.opciones.forEach((o, i) => {
       if (i !== p.correcta && /\b(siempre|nunca|jamás)\b/i.test(o)) {
@@ -132,7 +135,7 @@ export function revisarCalidad(preguntas: { tema: string; p: TPregunta }[], fuen
       }
     });
     if (p.opciones.some((o) => /todas las anteriores|ninguna de las anteriores/i.test(o))) {
-      avisos.push({ id: p.id, tipo: "Opción comodín", detalle: "Evitá \"todas/ninguna de las anteriores\": las opciones se barajan." });
+      avisos.push({ id: p.id, tipo: "Opción comodín", detalle: "Evitar \"todas/ninguna de las anteriores\": las opciones se barajan." });
     }
     if (!fuentesValidas.has(p.ref.fuente)) avisos.push({ id: p.id, tipo: "Fuente desconocida", detalle: `"${p.ref.fuente}" no está en src/content/fuentes.ts` });
     if (p.verificado === "pendiente") avisos.push({ id: p.id, tipo: "Sin verificar", detalle: "No entra al simulacro hasta verificarla." });

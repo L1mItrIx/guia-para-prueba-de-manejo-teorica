@@ -13,8 +13,7 @@ type Estado = {
   quizzes: Record<string, RegistroQuiz>; // por tema
   preguntas: Record<string, { vistas: number; aciertos: number }>; // por id de pregunta
   flashcards: Record<string, EstadoTarjeta>;
-  escenarios: Record<string, boolean>; // escenario resuelto bien
-  presentaciones: Record<string, boolean>; // tema visto completo
+  escenas: Record<string, boolean>; // escena animada vista completa
   simulacros: RegistroSimulacro[];
 };
 
@@ -23,8 +22,7 @@ type Acciones = {
   registrarRespuesta: (preguntaId: string, acerto: boolean) => void;
   registrarQuiz: (tema: string, nota: number) => void;
   responderFlashcard: (id: string, acerto: boolean) => void;
-  registrarEscenario: (id: string, acerto: boolean) => void;
-  registrarPresentacion: (tema: string) => void;
+  registrarEscenaVista: (id: string) => void;
   registrarSimulacro: (r: Omit<RegistroSimulacro, "fecha">) => void;
   reiniciar: () => void;
 };
@@ -34,8 +32,7 @@ const INICIAL: Estado = {
   quizzes: {},
   preguntas: {},
   flashcards: {},
-  escenarios: {},
-  presentaciones: {},
+  escenas: {},
   simulacros: [],
 };
 
@@ -83,15 +80,23 @@ export const useProgreso = create<Estado & Acciones>()(
         }),
       responderFlashcard: (id, acerto) =>
         set((s) => ({ flashcards: { ...s.flashcards, [id]: responderTarjeta(s.flashcards[id], acerto, Date.now()) } })),
-      registrarEscenario: (id, acerto) =>
-        set((s) => ({ escenarios: { ...s.escenarios, [id]: s.escenarios[id] || acerto } })),
-      registrarPresentacion: (tema) => set((s) => ({ presentaciones: { ...s.presentaciones, [tema]: true } })),
+      registrarEscenaVista: (id) => set((s) => (s.escenas[id] ? s : { escenas: { ...s.escenas, [id]: true } })),
       registrarSimulacro: (r) => set((s) => ({ simulacros: [{ ...r, fecha: Date.now() }, ...s.simulacros].slice(0, 20) })),
       reiniciar: () => set({ ...INICIAL }),
     }),
     {
       name: "prueba-teorica-cr:progreso",
-      version: 1,
+      version: 2,
+      // v1 → v2: se quitaron la presentación y el modo 3D aparte; las escenas pasan a contarse como "vistas".
+      migrate: (guardado, version) => {
+        const e = (guardado ?? {}) as Record<string, unknown>;
+        if (version < 2) {
+          const { escenarios, presentaciones, ...resto } = e;
+          void presentaciones;
+          return { ...resto, escenas: (escenarios as Record<string, boolean>) ?? {} } as unknown as Estado & Acciones;
+        }
+        return e as unknown as Estado & Acciones;
+      },
       storage: createJSONStorage(() => almacenamientoSeguro),
       skipHydration: true, // se rehidrata en el cliente (ProveedorProgreso) para evitar desajustes con el HTML estático
     },

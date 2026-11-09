@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import type { Flashcard } from "@/content/schema";
+import type { Escena, Flashcard } from "@/content/schema";
+import { EscenaEmbebida } from "@/components/three/escenas/EscenaEmbebida";
 import { dominio, ordenarParaRepaso, tocaRepasar } from "@/lib/leitner";
 import { useHidratado } from "@/lib/useHidratado";
 import { useProgreso } from "@/store/progreso";
@@ -10,7 +11,8 @@ import { Boton, BotonLink } from "@/components/ui/Boton";
 import { BarraProgreso } from "@/components/ui/BarraProgreso";
 import { RefFuente } from "@/components/ui/RefFuente";
 
-export function Flashcards({ tarjetas, volverHref }: { tarjetas: Flashcard[]; volverHref: string }) {
+export function Flashcards({ tarjetas, escenas = [], volverHref }: { tarjetas: Flashcard[]; escenas?: Escena[]; volverHref: string }) {
+  const escenaPorId = Object.fromEntries(escenas.map((e) => [e.id, e]));
   const reducir = useReducedMotion();
   const hidratado = useHidratado();
   const estados = useProgreso((s) => s.flashcards);
@@ -38,7 +40,7 @@ export function Flashcards({ tarjetas, volverHref }: { tarjetas: Flashcard[]; vo
       <div className="space-y-4 rounded-2xl border border-borde bg-superficie p-6">
         <BarraProgreso etiqueta="Tarjetas dominadas" valor={dominio(ids, estados)} />
         <p>
-          <strong>{pendientes}</strong> de {tarjetas.length} tarjetas para repasar hoy. Las que sabés vuelven en 1, 3, 7 y 14 días; las que fallás vuelven enseguida.
+          <strong>{pendientes}</strong> de {tarjetas.length} tarjetas pendientes de repaso hoy. Las acertadas vuelven a aparecer en 1, 3, 7 y 14 días; las falladas, en el próximo repaso.
         </p>
         <div className="flex flex-wrap gap-3">
           <Boton onClick={() => empezar(false)} disabled={pendientes === 0}>Repasar pendientes</Boton>
@@ -51,7 +53,7 @@ export function Flashcards({ tarjetas, volverHref }: { tarjetas: Flashcard[]; vo
   if (i >= mazo.length) {
     return (
       <div className="space-y-4 rounded-2xl bg-exito-fondo p-6" role="status">
-        <p className="text-xl font-bold">¡Repaso terminado!</p>
+        <p className="text-xl font-bold">Repaso terminado</p>
         <BarraProgreso etiqueta="Tarjetas dominadas" valor={dominio(ids, estados)} />
         <div className="flex flex-wrap gap-3">
           <Boton onClick={() => setMazo(null)}>Volver a empezar</Boton>
@@ -86,7 +88,7 @@ export function Flashcards({ tarjetas, volverHref }: { tarjetas: Flashcard[]; vo
           >
             <span className="text-xs font-semibold uppercase tracking-wide text-suave">Pregunta</span>
             <span className="text-2xl font-bold">{t.frente}</span>
-            <span className="text-xs text-suave">Tocá para ver la respuesta</span>
+            <span className="text-xs text-suave">Tocar la tarjeta para ver la respuesta</span>
           </span>
           <span
             className={`absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-exito bg-superficie p-6 text-center [backface-visibility:hidden] ${reducir ? (volteada ? "" : "hidden") : "[transform:rotateY(180deg)]"}`}
@@ -99,9 +101,10 @@ export function Flashcards({ tarjetas, volverHref }: { tarjetas: Flashcard[]; vo
       {volteada ? (
         <div className="space-y-3">
           <RefFuente referencia={t.ref} />
+          {t.escena && escenaPorId[t.escena] && <EscenaEmbebida key={t.id} escena={escenaPorId[t.escena]} modo="demostracion" auto />}
           <div className="grid grid-cols-2 gap-3">
-            <Boton variante="secundario" onClick={() => marcar(false)}>✘ No la sabía</Boton>
-            <Boton onClick={() => marcar(true)}>✔ La sabía</Boton>
+            <Boton variante="secundario" onClick={() => marcar(false)}>✘ Repasar de nuevo</Boton>
+            <Boton onClick={() => marcar(true)}>✔ Acertada</Boton>
           </div>
         </div>
       ) : (

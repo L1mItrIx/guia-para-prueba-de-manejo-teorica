@@ -1,8 +1,8 @@
 # Prueba Teórica CR
 
 Web pública y gratuita (sin cuentas) para preparar la **prueba teórica de manejo de Costa Rica**
-con contenido vigente a 2026: resúmenes, quizzes, flashcards, presentaciones, escenas 3D
-interactivas y simulacro de examen. Al entrar, la persona elige **Carro (B1)** o **Moto (A)**.
+con contenido vigente a 2026. En cada tema se elige cómo estudiar (resumen, quiz o flashcards) y los
+tres modos incluyen animaciones 3D de las situaciones; además hay un simulacro de práctica. Al entrar, la persona elige **Carro (B1)** o **Moto (A)**.
 Por ahora solo se desarrolla Carro; Moto aparece como "Próximamente".
 
 ## Usa siempre estas skills del proyecto
@@ -33,4 +33,5 @@ npm run video -- videos/guiones/<id>.json    # requiere build; sale en videos/sa
 - Sitio estático (`output: 'export'`), sin backend; progreso en `localStorage`.
 - Contenido como datos tipados en `src/content/`, validado con Zod, **con fuente** (Ley 9078,
   Manual del Conductor 2026, DGEV/COSEVI). Nunca inventar normas, montos ni artículos.
-- Interfaz en español de Costa Rica.
+- Texto en español neutral, natural e impersonal (sin voseo, tuteo ni "usted"); el simulacro es una
+  práctica, nunca "igual que el examen real". `tests/unit/textos.test.ts` lo vigila.

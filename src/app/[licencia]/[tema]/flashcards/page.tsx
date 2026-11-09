@@ -20,7 +20,7 @@ export default async function Pagina({ params }: { params: ParamsTema }) {
     <div className="mx-auto max-w-3xl space-y-6">
       <Migas items={[{ href: "/", texto: "Inicio" }, { href: `/${licencia.slug}/`, texto: licencia.nombre }, { href: volver, texto: tema.titulo }, { texto: "Flashcards" }]} />
       <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Flashcards: {tema.titulo}</h1>
-      <Flashcards tarjetas={tema.flashcards} volverHref={volver} />
+      <Flashcards tarjetas={tema.flashcards} escenas={tema.escenas} volverHref={volver} />
     </div>
   );
 }

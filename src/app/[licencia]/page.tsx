@@ -29,16 +29,17 @@ export default async function PaginaLicencia({ params }: { params: ParamsLicenci
       <Migas items={[{ href: "/", texto: "Inicio" }, { texto: licencia.nombre }]} />
       <header className="space-y-2">
         <h1 className="text-3xl font-extrabold tracking-tight">Licencia {licencia.id}: {licencia.nombre}</h1>
-        <p className="text-suave">Elegí un tema para estudiar o poné a prueba lo que sabés con el simulacro.</p>
+        <p className="text-suave">Temas de estudio y simulacro de práctica.</p>
       </header>
 
       <section className="rounded-2xl bg-primario p-6 text-primario-texto">
-        <h2 className="text-xl font-bold">Simulacro de examen</h2>
+        <h2 className="text-xl font-bold">Simulacro de práctica</h2>
         <p className="mt-1 text-sm opacity-90">
-          {EXAMEN.preguntas} preguntas · {EXAMEN.minutos} minutos · nota mínima {EXAMEN.notaMinima}. Igual que el examen real.
+          Práctica tipo examen: {EXAMEN.preguntas} preguntas, {EXAMEN.minutos} minutos y nota mínima de {EXAMEN.notaMinima}.
         </p>
+        <p className="mt-1 text-xs opacity-80">Es una práctica. La prueba oficial la aplica la Dirección General de Educación Vial.</p>
         <Link href={`${base}/simulacro/`} className="mt-4 inline-flex min-h-11 items-center rounded-xl bg-superficie px-4 py-2.5 text-sm font-semibold text-texto">
-          Hacer simulacro →
+          Empezar el simulacro →
         </Link>
       </section>
 
@@ -51,15 +52,14 @@ export default async function PaginaLicencia({ params }: { params: ParamsLicenci
                 <Link href={`${base}/${t.slug}/`} className="hover:text-primario">{t.titulo}</Link>
               </h3>
               <p className="text-sm text-suave">{t.descripcion}</p>
-              <ProgresoTema tema={t.slug} preguntas={t.preguntas.map((p) => p.id)} flashcards={t.flashcards.map((f) => f.id)} />
+              <ProgresoTema tema={t.slug} flashcards={t.flashcards.map((f) => f.id)} escenas={t.escenas.map((e) => e.id)} />
               <div className="mt-auto flex flex-wrap gap-2">
-                <BotonLink href={`${base}/${t.slug}/`}>Estudiar</BotonLink>
-                <BotonLink href={`${base}/${t.slug}/quiz/`} variante="secundario">Quiz</BotonLink>
+                <BotonLink href={`${base}/${t.slug}/`}>Estudiar este tema</BotonLink>
               </div>
             </li>
           ))}
           <li className="flex flex-col justify-center rounded-2xl border border-dashed border-borde p-5 text-sm text-suave">
-            Próximos temas: señales de tránsito, velocidades, adelantamiento, alcohol y drogas, primeros auxilios y mecánica básica.
+            En preparación: señales de tránsito, velocidades, adelantamiento, alcohol y drogas, primeros auxilios y mecánica básica.
           </li>
         </ul>
       </section>

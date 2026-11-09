@@ -3,7 +3,7 @@ import { COLUMNAS, type Aviso, type Fila } from "./lib";
 
 const ANCHOS: Partial<Record<keyof Fila, number>> = {
   tema: 16, id: 10, enunciado: 60, opcion_a: 40, opcion_b: 40, opcion_c: 40, opcion_d: 40,
-  correcta: 10, explicacion: 60, fuente: 14, detalle: 26, verificado: 13,
+  correcta: 10, explicacion: 60, fuente: 14, detalle: 26, verificado: 13, escena: 22,
 };
 
 export async function crearLibro(filas: Fila[], avisos: Aviso[]): Promise<ExcelJS.Workbook> {
@@ -35,11 +35,12 @@ export async function crearLibro(filas: Fila[], avisos: Aviso[]): Promise<ExcelJ
 
   const ayuda = libro.addWorksheet("Instrucciones");
   [
-    "Editá solo la hoja \"Preguntas\". Una fila = una pregunta.",
-    "correcta: letra A, B, C o D. Puede haber 3 o 4 opciones (dejá opcion_d vacía).",
+    "Editar solo la hoja \"Preguntas\". Una fila = una pregunta.",
+    "correcta: letra A, B, C o D. Puede haber 3 o 4 opciones (opcion_d vacía).",
     "fuente: id de src/content/fuentes.ts (p. ej. ley-9078). detalle: artículo e inciso.",
     "verificado: AAAA-MM-DD cuando se comprobó contra la fuente, o \"pendiente\".",
-    "Para una pregunta nueva usá un id nuevo (p. ej. int-23) y el slug del tema en \"tema\".",
+    "Para una pregunta nueva: id nuevo (p. ej. int-23) y el slug del tema en \"tema\".",
+    "escena (opcional): id de una escena animada del tema (ver src/content/temas/<tema>/escenas.ts).",
     "Después: npm run banco:importar -- banco/preguntas.xlsx",
   ].forEach((t) => ayuda.addRow([t]));
   ayuda.getColumn(1).width = 100;

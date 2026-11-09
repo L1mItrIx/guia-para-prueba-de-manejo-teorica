@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import type { Pregunta } from "@/content/schema";
+import type { Escena, Pregunta } from "@/content/schema";
+import { EscenaEmbebida } from "@/components/three/escenas/EscenaEmbebida";
 import { barajar, barajarOpciones } from "@/lib/barajar";
 import { calificar } from "@/lib/calificar";
 import { useProgreso } from "@/store/progreso";
@@ -21,7 +22,8 @@ function preparar(preguntas: Pregunta[]): Item[] {
 
 const LETRAS = ["A", "B", "C", "D"];
 
-export function Quiz({ tema, preguntas, volverHref }: { tema: string; preguntas: Pregunta[]; volverHref: string }) {
+export function Quiz({ tema, preguntas, escenas = [], volverHref }: { tema: string; preguntas: Pregunta[]; escenas?: Escena[]; volverHref: string }) {
+  const escenaPorId = Object.fromEntries(escenas.map((e) => [e.id, e]));
   const reducir = useReducedMotion();
   const [items, setItems] = useState<Item[] | null>(null);
   const [i, setI] = useState(0);
@@ -40,7 +42,7 @@ export function Quiz({ tema, preguntas, volverHref }: { tema: string; preguntas:
     return (
       <div className="space-y-4 rounded-2xl border border-borde bg-superficie p-6">
         <p className="text-lg font-semibold">{preguntas.length} preguntas de selección única</p>
-        <p className="text-suave">Después de cada respuesta verás si acertaste y por qué, con el artículo de la ley. Las preguntas y las opciones cambian de orden cada vez.</p>
+        <p className="text-suave">Después de cada respuesta aparece la explicación con el artículo de la ley y, en las preguntas de situación, la animación de lo que corresponde hacer. Las preguntas y las opciones cambian de orden en cada intento.</p>
         <Boton onClick={empezar}>Empezar quiz</Boton>
       </div>
     );
@@ -53,13 +55,13 @@ export function Quiz({ tema, preguntas, volverHref }: { tema: string; preguntas:
     return (
       <div className="space-y-6">
         <div className={`rounded-2xl p-6 ${r.aprobado ? "bg-exito-fondo" : "bg-error-fondo"}`} role="status">
-          <p className="text-sm font-semibold uppercase tracking-wide">{r.aprobado ? "¡Aprobado!" : "Todavía no"}</p>
+          <p className="text-sm font-semibold uppercase tracking-wide">{r.aprobado ? "Aprobado" : "Por debajo de la nota mínima"}</p>
           <p className="text-4xl font-extrabold" data-testid="nota-quiz">{r.nota}</p>
-          <p className="text-sm">{r.correctas} de {r.total} correctas · se aprueba con {EXAMEN.notaMinima}</p>
+          <p className="text-sm">{r.correctas} de {r.total} correctas · nota mínima: {EXAMEN.notaMinima}</p>
         </div>
         {falladas.length > 0 && (
           <section className="space-y-3">
-            <h2 className="text-xl font-bold">Repasá las que fallaste</h2>
+            <h2 className="text-xl font-bold">Preguntas para repasar</h2>
             {falladas.map((it) => (
               <div key={it.id} className="space-y-2 rounded-2xl border border-borde bg-superficie p-4">
                 <p className="font-semibold">{it.enunciado}</p>
@@ -71,7 +73,7 @@ export function Quiz({ tema, preguntas, volverHref }: { tema: string; preguntas:
           </section>
         )}
         <div className="flex flex-wrap gap-3">
-          <Boton onClick={empezar}>Repetir quiz</Boton>
+          <Boton onClick={empezar}>Hacer el quiz otra vez</Boton>
           <BotonLink href={volverHref} variante="secundario">Volver al tema</BotonLink>
         </div>
       </div>
@@ -117,6 +119,7 @@ export function Quiz({ tema, preguntas, volverHref }: { tema: string; preguntas:
           className="space-y-4 rounded-2xl border border-borde bg-superficie p-5"
         >
           <h2 className="text-lg font-semibold leading-snug">{it.enunciado}</h2>
+          {it.escena && escenaPorId[it.escena] && <EscenaEmbebida escena={escenaPorId[it.escena]} modo="pregunta" revelar={respondida} />}
           <ul className="space-y-2">
             {it.orden.map((op, k) => {
               const esCorrecta = k === it.correctaBarajada;
@@ -136,7 +139,7 @@ export function Quiz({ tema, preguntas, volverHref }: { tema: string; preguntas:
                     <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-superficie-2 text-sm font-bold">{LETRAS[k]}</span>
                     <span className="pt-0.5">{op}</span>
                     {respondida && esCorrecta && <span className="ml-auto text-exito" aria-label="Respuesta correcta">✔</span>}
-                    {respondida && !esCorrecta && k === elegida && <span className="ml-auto text-error" aria-label="Tu respuesta, incorrecta">✘</span>}
+                    {respondida && !esCorrecta && k === elegida && <span className="ml-auto text-error" aria-label="Respuesta elegida, incorrecta">✘</span>}
                   </button>
                 </li>
               );
@@ -144,7 +147,7 @@ export function Quiz({ tema, preguntas, volverHref }: { tema: string; preguntas:
           </ul>
           {respondida && (
             <div className={`space-y-2 rounded-xl p-4 ${elegida === it.correctaBarajada ? "bg-exito-fondo" : "bg-error-fondo"}`} role="status">
-              <p className="font-bold">{elegida === it.correctaBarajada ? "¡Correcto!" : "Incorrecto"}</p>
+              <p className="font-bold">{elegida === it.correctaBarajada ? "Correcto" : "Incorrecto"}</p>
               <p className="text-sm">{it.explicacion}</p>
               <RefFuente referencia={it.ref} />
             </div>

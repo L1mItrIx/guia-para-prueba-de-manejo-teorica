@@ -26,6 +26,8 @@ export const Pregunta = z
     explicacion: z.string().min(10),
     ref: RefFuente,
     verificado: Verificado,
+    /** Escena animada que ilustra la situación (se revela la solución al responder). */
+    escena: z.string().optional(),
   })
   .refine((p) => p.correcta < p.opciones.length, {
     message: "La respuesta correcta no existe entre las opciones",
@@ -37,6 +39,7 @@ export const Flashcard = z.object({
   frente: z.string().min(3),
   reverso: z.string().min(3),
   ref: RefFuente,
+  escena: z.string().optional(),
 });
 export type Flashcard = z.infer<typeof Flashcard>;
 
@@ -48,60 +51,126 @@ export const SeccionResumen = z.object({
   /** Multa vigente asociada, si aplica (texto ya formateado). */
   multa: z.string().optional(),
   ref: RefFuente,
+  /** Escenas animadas que acompañan la sección. */
+  escenas: z.array(z.string()).default([]),
 });
 export type SeccionResumen = z.infer<typeof SeccionResumen>;
 
 export const Visual = z.enum(["alto", "ceda", "semaforo", "rotonda", "emergencia", "peaton", "prioridad"]);
 export type Visual = z.infer<typeof Visual>;
 
-export const Diapositiva = z.object({
-  id: z.string().min(1),
-  titulo: z.string().min(3),
-  puntos: z.array(z.string().min(3)).min(1).max(6),
-  visual: Visual.optional(),
-});
-export type Diapositiva = z.infer<typeof Diapositiva>;
+/* ───────────── Escenas animadas (3D) ───────────── */
 
-/** Escenas 3D de intersección. */
 export const Direccion = z.enum(["norte", "sur", "este", "oeste"]);
 export type Direccion = z.infer<typeof Direccion>;
 export const Maniobra = z.enum(["recto", "derecha", "izquierda"]);
 export type Maniobra = z.infer<typeof Maniobra>;
-export const Control = z.enum(["ninguno", "alto", "ceda", "semaforo-rojo", "semaforo-verde"]);
+export const Control = z.enum(["ninguno", "alto", "ceda", "semaforo-rojo", "semaforo-amarillo", "semaforo-verde"]);
 export type Control = z.infer<typeof Control>;
+export const Luz = z.enum(["rojo", "amarillo", "verde"]);
+export type Luz = z.infer<typeof Luz>;
 
-export const Vehiculo = z.object({
+const Color = z.string().regex(/^#[0-9a-fA-F]{6}$/);
+
+/** Un paso de la línea de tiempo de una escena. Se ejecutan en orden. */
+export const Paso = z.discriminatedUnion("accion", [
+  /** Mueve un vehículo hasta su línea de parada / ceda ("parada") o hasta el final de su recorrido ("fin"). */
+  z.object({ accion: z.literal("mover"), vehiculo: z.string(), hasta: z.enum(["parada", "fin"]).default("fin") }),
+  /** Los peatones (todos, o los indicados) cruzan su paso peatonal. */
+  z.object({ accion: z.literal("peatones"), peatones: z.array(z.string()).optional() }),
+  /** Cambia la luz del semáforo de un acceso. */
+  z.object({ accion: z.literal("semaforo"), acceso: Direccion, luz: Luz }),
+  z.object({ accion: z.literal("pausa"), segundos: z.number().positive().max(10) }),
+]);
+export type Paso = z.infer<typeof Paso>;
+
+export const VehiculoCruce = z.object({
   id: z.string().min(1),
   nombre: z.string().min(1), // "Carro rojo"
-  color: z.string().regex(/^#[0-9a-fA-F]{6}$/),
-  desde: Direccion, // de dónde viene (acceso por el que entra)
+  color: Color,
+  desde: Direccion, // acceso por el que llega
   maniobra: Maniobra,
   emergencia: z.boolean().default(false),
+  /** Metros respecto de la línea de parada al empezar (negativo = más atrás; positivo = ya pasó el cruce). */
+  inicio: z.number().min(-20).max(30).default(0),
+  /** Hasta dónde llega desde el centro del cruce al terminar (m). Si falta, se escalona según el orden. */
+  fin: z.number().min(8).max(40).optional(),
+  etiqueta: z.boolean().default(true),
 });
-export type Vehiculo = z.infer<typeof Vehiculo>;
+export type VehiculoCruce = z.infer<typeof VehiculoCruce>;
 
-export const Escenario = z
-  .object({
-    id: z.string().min(1),
-    titulo: z.string().min(3),
-    situacion: z.string().min(10),
-    /** Control de cada acceso. Los que no aparecen no tienen señal. */
-    controles: z.partialRecord(Direccion, Control),
-    /** Tipo de vía de cada acceso (para la regla primaria/secundaria). */
-    tipoVia: z.partialRecord(Direccion, z.enum(["primaria", "secundaria"])).optional(),
-    vehiculos: z.array(Vehiculo).min(2).max(4),
-    /** Orden correcto de paso (ids de vehiculos). */
-    orden: z.array(z.string()).min(2),
-    explicacion: z.string().min(10),
-    ref: RefFuente,
-  })
-  .refine((e) => e.orden.every((id) => e.vehiculos.some((v) => v.id === id)), {
-    message: "El orden menciona un vehículo que no existe",
-  })
-  .refine((e) => new Set(e.vehiculos.map((v) => v.desde)).size === e.vehiculos.length, {
-    message: "Dos vehículos no pueden venir del mismo acceso",
+export const Peaton = z.object({
+  id: z.string().min(1),
+  /** Brazo del cruce en cuyo paso peatonal camina. */
+  paso: Direccion,
+  /** Hacia qué lado cruza, visto desde el conductor que llega por ese brazo. */
+  sentido: z.enum(["a-la-derecha", "a-la-izquierda"]).default("a-la-izquierda"),
+  color: Color.default("#f28c28"),
+});
+export type Peaton = z.infer<typeof Peaton>;
+
+const BaseEscena = {
+  id: z.string().regex(/^[a-z0-9-]+$/),
+  titulo: z.string().min(3),
+  situacion: z.string().min(10),
+  explicacion: z.string().min(10),
+  ref: RefFuente,
+};
+
+export const EscenaCruce = z.object({
+  ...BaseEscena,
+  tipo: z.literal("cruce"),
+  /** Control de cada acceso. Los que no aparecen no tienen señal. */
+  controles: z.partialRecord(Direccion, Control).default({}),
+  tipoVia: z.partialRecord(Direccion, z.enum(["primaria", "secundaria"])).optional(),
+  noche: z.boolean().default(false),
+  vehiculos: z.array(VehiculoCruce).min(1).max(5),
+  peatones: z.array(Peaton).default([]),
+  /** Orden de paso: atajo para "mover cada uno hasta el fin, en este orden". */
+  orden: z.array(z.string()).optional(),
+  /** Línea de tiempo completa (si está, reemplaza a `orden`). */
+  pasos: z.array(Paso).optional(),
+});
+export type EscenaCruce = z.infer<typeof EscenaCruce>;
+
+export const VehiculoRotonda = z.object({
+  id: z.string().min(1),
+  nombre: z.string().min(1),
+  color: Color,
+  /** Brazo por el que entra. Si falta, ya circula dentro desde `dentroDesde` (grados; 0 = este, 90 = norte). */
+  entrada: Direccion.optional(),
+  dentroDesde: z.number().min(0).max(360).optional(),
+  salida: Direccion,
+  carril: z.enum(["interno", "externo"]),
+  emergencia: z.boolean().default(false),
+  etiqueta: z.boolean().default(true),
+});
+export type VehiculoRotonda = z.infer<typeof VehiculoRotonda>;
+
+export const EscenaRotonda = z.object({
+  ...BaseEscena,
+  tipo: z.literal("rotonda"),
+  vehiculos: z.array(VehiculoRotonda).min(1).max(4),
+  orden: z.array(z.string()).optional(),
+  pasos: z.array(Paso).optional(),
+});
+export type EscenaRotonda = z.infer<typeof EscenaRotonda>;
+
+export const Escena = z
+  .discriminatedUnion("tipo", [EscenaCruce, EscenaRotonda])
+  .refine((e) => !!e.orden || !!e.pasos, { message: "La escena necesita `orden` o `pasos`" })
+  .refine(
+    (e) => {
+      const ids = new Set(e.vehiculos.map((v) => v.id));
+      const usados = [...(e.orden ?? []), ...(e.pasos ?? []).flatMap((p) => (p.accion === "mover" ? [p.vehiculo] : []))];
+      return usados.every((id) => ids.has(id));
+    },
+    { message: "El orden o los pasos mencionan un vehículo que no existe" },
+  )
+  .refine((e) => e.tipo !== "rotonda" || e.vehiculos.every((v) => (v.entrada ? 1 : 0) + (v.dentroDesde !== undefined ? 1 : 0) === 1), {
+    message: "Cada vehículo de rotonda necesita `entrada` o `dentroDesde` (uno solo)",
   });
-export type Escenario = z.infer<typeof Escenario>;
+export type Escena = z.infer<typeof Escena>;
 
 export const Tema = z.object({
   slug: z.string().regex(/^[a-z0-9-]+$/),
@@ -111,8 +180,7 @@ export const Tema = z.object({
   resumen: z.array(SeccionResumen).min(1),
   preguntas: z.array(Pregunta).min(1),
   flashcards: z.array(Flashcard).min(1),
-  diapositivas: z.array(Diapositiva).min(1),
-  escenarios: z.array(Escenario).default([]),
+  escenas: z.array(Escena).default([]),
 });
 export type Tema = z.infer<typeof Tema>;
 export type TemaEntrada = z.input<typeof Tema>;
