@@ -49,11 +49,17 @@ Por cada dato que se vaya a usar:
 ### Reglas para preguntas generadas desde el texto
 
 - Un solo dato por pregunta; la respuesta correcta se puede señalar en el artículo citado.
-- 3–4 opciones; distractores **plausibles** (errores comunes, números cercanos, la regla de otra situación),
-  de largo parecido a la correcta y sin absolutos que delaten la respuesta.
+- Preferir preguntas de **aplicación** (una situación concreta: hora, señal, quién viene de dónde) a las de memoria.
+- 3–4 opciones; distractores **plausibles** sacados de reglas vecinas que se confunden (CEDA ↔ ALTO,
+  derecha en rojo ↔ regla de 22:00–5:00, 10 m ↔ 25 m ↔ 5 m, montos de otra categoría de multa,
+  "el de la derecha" ↔ "el de la izquierda"). Nada de opciones de chiste ("tocar la bocina").
+- Largo parecido (la correcta ≤ 1,25 × el promedio de los distractores), misma estructura gramatical
+  y sin absolutos ("siempre/nunca") que delaten la respuesta.
+- La explicación dice por qué es la correcta y, si ayuda, cuál es el error típico.
 - Nada de "todas/ninguna de las anteriores" (las opciones se barajan).
 - La explicación parafrasea el artículo en lenguaje simple y dice por qué las otras no aplican si ayuda.
 - Después, correr la revisión del banco (skill `xlsx`): `npm run banco:exportar` y leer la hoja "Revisión".
+  `npm test` falla si quedan pistas obvias.
 
 ## 4. Verificar
 

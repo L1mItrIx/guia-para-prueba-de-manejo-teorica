@@ -25,14 +25,17 @@ Crea `banco/preguntas.xlsx` (no versionado) con tres hojas:
 
 | Tipo | Qué significa | Cómo se corrige |
 |---|---|---|
-| Pista por largo | la correcta es claramente la opción más larga | alargar distractores o acortar la correcta |
+| Pista por largo | la correcta mide más de 1,25 × el promedio de los distractores | emparejar largos |
+| Pista por eco | solo la correcta repite palabras clave del enunciado | usar esas palabras también en distractores |
 | Absolutos | un distractor usa "siempre/nunca/jamás" y delata que es falso | reformular sin absoluto |
 | Opción comodín | "todas/ninguna de las anteriores" | eliminar (las opciones se barajan) |
 | Duplicada | mismo enunciado que otra | fusionar o borrar una |
 | Fuente desconocida | `fuente` no existe en `src/content/fuentes.ts` | registrar la fuente o corregir el id |
 | Sin verificar | `verificado = pendiente` | verificar contra la norma (skill `pdf-reading`) |
 
-Los avisos no bloquean la importación; los **errores** sí.
+Los avisos no bloquean la importación; los **errores** sí. Pero `npm test` **falla** si el banco tiene avisos
+de tipo largo, eco, absolutos, comodín o duplicada (`AVISOS_BLOQUEANTES` en `scripts/banco/lib.ts`,
+test en `tests/unit/contenido.test.ts`), y sin tests en verde no se publica.
 
 ## Importar
 

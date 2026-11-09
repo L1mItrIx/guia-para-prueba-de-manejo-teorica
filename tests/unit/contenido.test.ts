@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { TEMAS } from "@/content/temas";
 import { buscarFuente } from "@/content/fuentes";
 import { LICENCIAS } from "@/content/licencias";
+import { FUENTES } from "@/content/fuentes";
+import { AVISOS_BLOQUEANTES, revisarCalidad } from "../../scripts/banco/lib";
 
 describe("contenido", () => {
   it("todos los temas cumplen el esquema (TEMAS ya hace parse)", () => {
@@ -43,5 +45,13 @@ describe("contenido", () => {
     expect(LICENCIAS.some((l) => l.disponible)).toBe(true);
     const ids = new Set(LICENCIAS.map((l) => l.id));
     for (const t of TEMAS) for (const l of t.licencias) expect(ids.has(l)).toBe(true);
+  });
+
+  it("ninguna pregunta da pistas obvias (largo, eco, absolutos, comodines, duplicadas)", () => {
+    const avisos = revisarCalidad(
+      TEMAS.flatMap((t) => t.preguntas.map((p) => ({ tema: t.slug, p }))),
+      new Set(FUENTES.map((f) => f.id)),
+    ).filter((a) => AVISOS_BLOQUEANTES.includes(a.tipo));
+    expect(avisos, avisos.map((a) => `${a.id} · ${a.tipo}: ${a.detalle}`).join("\n")).toEqual([]);
   });
 });

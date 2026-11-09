@@ -84,15 +84,47 @@ export function preguntasDesdeFilas(filas: Partial<Fila>[]): { porTema: Map<stri
 
 export type Aviso = { id: string; tipo: string; detalle: string };
 
+/** La correcta no puede medir más que este factor × el promedio de los distractores. */
+export const UMBRAL_LARGO = 1.25;
+
+/** Tipos de aviso que el test de contenido no permite (ver tests/unit/contenido.test.ts). */
+export const AVISOS_BLOQUEANTES = ["Pista por largo", "Pista por eco", "Absolutos", "Opción comodín", "Duplicada"];
+
+const VACIAS = new Set(
+  ["porque", "cuando", "donde", "desde", "hasta", "sobre", "entre", "tiene", "debe", "puede", "según", "usted", "este", "esta", "estos", "otro", "otra", "otros", "todos", "todas", "solo", "también", "antes", "después", "mismo", "misma", "cual", "cuál", "quién", "quien", "hacer", "corresponde"].map((w) => w.normalize("NFD").replace(/[\u0300-\u036f]/g, "")),
+);
+
+/** Palabras de 5+ letras, sin tildes y sin palabras vacías. */
+function palabrasClave(texto: string): Set<string> {
+  return new Set(
+    texto
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .split(/[^a-z0-9ñ]+/)
+      .filter((w) => w.length >= 5 && !VACIAS.has(w)),
+  );
+}
+
 /** Revisiones de calidad que no impiden importar, pero conviene corregir. */
 export function revisarCalidad(preguntas: { tema: string; p: TPregunta }[], fuentesValidas: Set<string>): Aviso[] {
   const avisos: Aviso[] = [];
   const enunciados = new Map<string, string>();
   for (const { p } of preguntas) {
     const largos = p.opciones.map((o) => o.length);
-    const max = Math.max(...largos);
-    if (largos[p.correcta] === max && largos.filter((l) => l === max).length === 1 && max > 1.4 * Math.min(...largos)) {
-      avisos.push({ id: p.id, tipo: "Pista por largo", detalle: "La correcta es claramente la opción más larga; alargá algún distractor." });
+    const distractores = largos.filter((_, i) => i !== p.correcta);
+    const promedio = distractores.reduce((a, b) => a + b, 0) / distractores.length;
+    if (largos[p.correcta] > UMBRAL_LARGO * promedio) {
+      avisos.push({
+        id: p.id,
+        tipo: "Pista por largo",
+        detalle: `La correcta mide ${largos[p.correcta]} caracteres y los distractores ${Math.round(promedio)} en promedio (máx. ×${UMBRAL_LARGO}); emparejá los largos.`,
+      });
+    }
+    const claveEnunciado = palabrasClave(p.enunciado);
+    const compartidas = p.opciones.map((o) => [...palabrasClave(o)].filter((w) => claveEnunciado.has(w)).length);
+    if (compartidas[p.correcta] >= 2 && compartidas.every((n, i) => i === p.correcta || n === 0)) {
+      avisos.push({ id: p.id, tipo: "Pista por eco", detalle: "Solo la correcta repite palabras del enunciado; usalas también en algún distractor." });
     }
     p.opciones.forEach((o, i) => {
       if (i !== p.correcta && /\b(siempre|nunca|jamás)\b/i.test(o)) {

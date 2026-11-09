@@ -46,4 +46,24 @@ describe("banco de preguntas ↔ hoja de cálculo", () => {
     expect(ts).toContain('export const preguntas: TemaEntrada["preguntas"] = [');
     expect(ts).toContain(tema.preguntas[0].id);
   });
+
+  it("marca la correcta cuando es mucho más larga que los distractores", () => {
+    const p = { ...tema.preguntas[0], opciones: ["Una respuesta correcta larguísima con muchos detalles extra", "Corta uno", "Corta dos"], correcta: 0 };
+    expect(revisarCalidad([{ tema: "t", p }], new Set([p.ref.fuente])).map((a) => a.tipo)).toContain("Pista por largo");
+  });
+
+  it("no marca largo si las opciones son parejas", () => {
+    const p = { ...tema.preguntas[0], opciones: ["Detenerse en la línea", "Reducir sin detenerse", "Seguir con precaución"], correcta: 0 };
+    expect(revisarCalidad([{ tema: "t", p }], new Set([p.ref.fuente])).map((a) => a.tipo)).not.toContain("Pista por largo");
+  });
+
+  it("marca el eco: solo la correcta repite palabras del enunciado", () => {
+    const p = {
+      ...tema.preguntas[0],
+      enunciado: "¿Qué carril usa en una rotonda?",
+      opciones: ["El carril de la rotonda indicado", "Acelerar al máximo ya", "Frenar de inmediato ya"],
+      correcta: 0,
+    };
+    expect(revisarCalidad([{ tema: "t", p }], new Set([p.ref.fuente])).map((a) => a.tipo)).toContain("Pista por eco");
+  });
 });
