@@ -1,4 +1,6 @@
-# Teórico CR
+# Teórico CR — Guía para prueba de manejo teórica
+
+**Sitio:** https://l1mitrix.github.io/guia-para-prueba-de-manejo-teorica/
 
 Web gratuita y sin cuentas para preparar la **prueba teórica de manejo de Costa Rica** (2026):
 resúmenes, quizzes, flashcards, presentaciones, **escenas 3D interactivas** y simulacro de examen.

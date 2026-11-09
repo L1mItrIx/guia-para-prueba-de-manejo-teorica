@@ -19,6 +19,7 @@ Tema completo: **Intersecciones y derecho de vía** (resumen, 22 preguntas, 16 f
 - [x] Simulacro (40 preguntas máx., 50 min, nota 70) con el banco verificado disponible
 - [x] Workflow de GitHub Pages
 - [x] Repo público: https://github.com/L1mItrIx/guia-para-prueba-de-manejo-teorica (CI en verde)
+- [x] Sitio publicado en GitHub Pages: https://l1mitrix.github.io/guia-para-prueba-de-manejo-teorica/ (se actualiza con cada push a `main`)
 - [x] Skills `frontend-design`, `pdf-reading`, `xlsx`, `video-making` con sus herramientas:
       `banco:exportar/importar` (exceljs), `fuentes:extraer/articulo` (pdftotext), `video` (Playwright + ffmpeg)
 - [x] Las 22 preguntas de Intersecciones reescritas: distractores con errores reales, largos parejos,
@@ -27,14 +28,13 @@ Tema completo: **Intersecciones y derecho de vía** (resumen, 22 preguntas, 16 f
 
 ## Siguiente
 1. Deuda visual (skill frontend-design): reemplazar los emoji de las tarjetas de modos y del simulacro por íconos SVG.
-2. Activar GitHub Pages (Settings → Pages → Source: GitHub Actions) y volver a correr el workflow; el build ya pasa en CI, solo falla el deploy por Pages desactivado.
-3. Conseguir el texto oficial del **Manual del Conductor 2026 (automóvil)** y revisar el tema contra él.
-4. Confirmar con la DGEV el formato 2026 del examen (nº de preguntas, minutos) → `src/content/examen.ts`.
-5. Nuevo tema: **Señales de tránsito** (verticales, horizontales, semáforos) con escena 3D de señales.
-6. Temas siguientes: velocidades y distancias, adelantamiento, alcohol y drogas, sistema de puntos y multas,
+2. Conseguir el texto oficial del **Manual del Conductor 2026 (automóvil)** y revisar el tema contra él.
+3. Confirmar con la DGEV el formato 2026 del examen (nº de preguntas, minutos) → `src/content/examen.ts`.
+4. Nuevo tema: **Señales de tránsito** (verticales, horizontales, semáforos) con escena 3D de señales.
+5. Temas siguientes: velocidades y distancias, adelantamiento, alcohol y drogas, sistema de puntos y multas,
    primeros auxilios / accidentes, mecánica básica y conducción preventiva.
-7. Cuando haya ≥ 40 preguntas verificadas, el simulacro queda con el tamaño real.
-8. Licencia A (moto): contenido propio desde el manual de motociclistas; luego `disponible: true`.
+6. Cuando haya ≥ 40 preguntas verificadas, el simulacro queda con el tamaño real.
+7. Licencia A (moto): contenido propio desde el manual de motociclistas; luego `disponible: true`.
 
 ## Cobertura de contenido
 | Tema | Licencia | Preguntas | Flashcards | Diapositivas | Escenas 3D |
@@ -53,6 +53,7 @@ Tema completo: **Intersecciones y derecho de vía** (resumen, 22 preguntas, 16 f
 - 2026-11-09 — Videos generados grabando el sitio real (Playwright) + ffmpeg con subtítulos quemados; sin audio de terceros.
 
 ## Bitácora
+- 2026-11-09 — GitHub Pages activado y verificado (todas las rutas 200, escena 3D y quiz funcionando).
 - 2026-11-09 — Repo creado en GitHub por el usuario y código subido a `main`.
 - 2026-11-09 — Sesión 1 (cont.): preguntas menos obvias + test de calidad del banco.
 - 2026-11-09 — Sesión 1 (cont.): skills frontend-design, pdf-reading, xlsx y video-making + scripts y tests.
