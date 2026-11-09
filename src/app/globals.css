@@ -1,26 +1,80 @@
 @import "tailwindcss";
 
+/* Tokens de color. Inspirados en la bandera de Costa Rica (azul, blanco, rojo). */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --fondo: #f6f7fb;
+  --superficie: #ffffff;
+  --superficie-2: #eef1f8;
+  --texto: #14182b;
+  --texto-suave: #4b5370;
+  --borde: #d9deeb;
+  --primario: #0b3d91;
+  --primario-texto: #ffffff;
+  --acento: #ce1126;
+  --exito: #157a43;
+  --exito-fondo: #e3f5ea;
+  --error: #b42318;
+  --error-fondo: #fde8e6;
+  --aviso-fondo: #fff4d6;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --fondo: #0d1020;
+    --superficie: #161a2e;
+    --superficie-2: #1f2440;
+    --texto: #eef0f8;
+    --texto-suave: #a8aec8;
+    --borde: #2c3354;
+    --primario: #5b8def;
+    --primario-texto: #0d1020;
+    --acento: #ff5a6a;
+    --exito: #4ccb84;
+    --exito-fondo: #12301f;
+    --error: #ff7b6e;
+    --error-fondo: #3a1714;
+    --aviso-fondo: #3a3010;
   }
 }
 
+@theme inline {
+  --color-fondo: var(--fondo);
+  --color-superficie: var(--superficie);
+  --color-superficie-2: var(--superficie-2);
+  --color-texto: var(--texto);
+  --color-suave: var(--texto-suave);
+  --color-borde: var(--borde);
+  --color-primario: var(--primario);
+  --color-primario-texto: var(--primario-texto);
+  --color-acento: var(--acento);
+  --color-exito: var(--exito);
+  --color-exito-fondo: var(--exito-fondo);
+  --color-error: var(--error);
+  --color-error-fondo: var(--error-fondo);
+  --color-aviso-fondo: var(--aviso-fondo);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: var(--font-sans);
+}
+
+:focus-visible {
+  outline: 3px solid var(--primario);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

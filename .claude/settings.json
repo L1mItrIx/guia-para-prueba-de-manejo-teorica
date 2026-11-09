@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"$CLAUDE_PROJECT_DIR/docs/PROGRESO.md\"; if [ -f \"$f\" ]; then echo '=== Memoria del proyecto (docs/PROGRESO.md) ==='; cat \"$f\"; fi"
+          }
+        ]
+      }
+    ]
+  }
+}
