@@ -43,3 +43,8 @@ next-env.d.ts
 # pruebas
 /test-results/
 /playwright-report/
+
+# material de trabajo (no versionar)
+/fuentes/
+/banco/*.xlsx
+/videos/salida/

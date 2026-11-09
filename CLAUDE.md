@@ -8,7 +8,11 @@ Por ahora solo se desarrolla Carro; Moto aparece como "Próximamente".
 ## Usa siempre estas skills del proyecto
 - `progreso-proyecto` — al empezar y al terminar cada tarea. Memoria en `docs/PROGRESO.md`.
 - `arquitectura` — antes de crear/mover archivos o agregar contenido.
-- `animacion-3d` — antes de tocar escenas 3D o animaciones.
+- `animacion-3d` — antes de tocar escenas 3D o animaciones (técnica y rendimiento).
+- `frontend-design` — antes de crear o rediseñar páginas, componentes o la estética de una escena.
+- `pdf-reading` — para leer la ley o el manual en PDF y generar contenido con fuente.
+- `xlsx` — para revisar, limpiar o cargar el banco de preguntas desde Excel.
+- `video-making` — solo para videos explicativos cortos aparte de la app.
 
 ## Comandos
 ```bash
@@ -18,6 +22,11 @@ npm run typecheck
 npm test             # vitest: lógica + validación de todo el contenido
 npm run build        # export estático en out/
 npm run test:e2e     # playwright contra out/ (requiere build)
+npm run banco:exportar                       # banco de preguntas → banco/preguntas.xlsx
+npm run banco:importar -- banco/preguntas.xlsx [--escribir]
+npm run fuentes:extraer -- <url-o-pdf> <nombre>   # PDF → fuentes/<nombre>.txt
+npm run -s fuentes:articulo -- fuentes/<nombre>.txt 104
+npm run video -- videos/guiones/<id>.json    # requiere build; sale en videos/salida/
 ```
 
 ## Reglas clave

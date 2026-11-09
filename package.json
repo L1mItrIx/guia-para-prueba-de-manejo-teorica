@@ -8,7 +8,12 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:e2e": "playwright test --trace off"
+    "test:e2e": "playwright test --trace off",
+    "banco:exportar": "tsx scripts/banco/exportar.ts",
+    "banco:importar": "tsx scripts/banco/importar.ts",
+    "fuentes:extraer": "bash scripts/fuentes/extraer.sh",
+    "fuentes:articulo": "node scripts/fuentes/articulo.mjs",
+    "video": "node scripts/video/grabar.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",
@@ -34,9 +39,11 @@
     "@vitejs/plugin-react": "^6.2.1",
     "eslint": "^9",
     "eslint-config-next": "15.5.29",
+    "exceljs": "^4.4.0",
     "jsdom": "^31.0.0",
     "serve": "^14.2.7",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^5.1.0"
   }

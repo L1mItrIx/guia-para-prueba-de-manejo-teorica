@@ -26,7 +26,8 @@ npm run test:e2e
 - `src/content/` — contenido como datos tipados (Zod), un directorio por tema.
 - `src/components/three/` — escenas 3D (React Three Fiber).
 - `src/lib/` — lógica pura con tests.
-- `.claude/skills/` — skills del proyecto para Claude Code: `animacion-3d`, `arquitectura`, `progreso-proyecto`.
+- `.claude/skills/` — skills del proyecto para Claude Code: `animacion-3d`, `arquitectura`, `progreso-proyecto`, `frontend-design`, `pdf-reading`, `xlsx`, `video-making`.
+- `scripts/` — herramientas: banco de preguntas ↔ Excel, extracción de PDFs, grabación de videos.
 
 ## Publicación
 El workflow `.github/workflows/pages.yml` publica el export estático en GitHub Pages en cada push a `main`

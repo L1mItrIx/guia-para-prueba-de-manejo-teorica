@@ -64,7 +64,16 @@ tests/
 docs/
   PROGRESO.md                         memoria del proyecto (skill progreso-proyecto)
   FUENTES.md                          fuentes y verificación 2026
+scripts/                              herramientas de trabajo (NO se incluyen en el sitio)
+  banco/                              Excel ↔ preguntas.ts (skill xlsx)
+  fuentes/                            extraer PDF y citar artículos (skill pdf-reading)
+  video/                              grabar videos explicativos (skill video-making)
+videos/guiones/                       guiones JSON de los videos (versionados)
+fuentes/  banco/*.xlsx  videos/salida/   material de trabajo, en .gitignore
 ```
+
+Skills relacionadas: `frontend-design` (cómo se ve), `animacion-3d` (cómo se anima),
+`pdf-reading` (de dónde sale el contenido), `xlsx` (revisión del banco), `video-making` (videos aparte).
 
 ## Receta: agregar un tema nuevo
 
