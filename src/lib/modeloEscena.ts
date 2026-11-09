@@ -1,6 +1,6 @@
 import type { Direccion, Escena, Luz, Paso } from "@/content/schema";
 import { crearLineaTiempo, pasosDesdeOrden, type EstadoEscena } from "./lineaTiempo";
-import { recorridoCruce, SALIDA, type Recorrido } from "./rutas";
+import { ATRAS, recorridoCruce, SALIDA, type Recorrido } from "./rutas";
 import { recorridoRotonda, SALIDA_ROTONDA } from "./rutas-rotonda";
 
 export type ModeloEscena = {
@@ -37,7 +37,8 @@ export function modeloEscena(e: Escena): ModeloEscena {
 
   if (e.tipo === "cruce") {
     for (const v of e.vehiculos) {
-      const r = recorridoCruce(v.desde, v.maniobra, v.fin ?? SALIDA + escalon(v.id) * 6.5);
+      const desvio = v.desvio ? { lateral: v.desvio, desdeS: ATRAS + v.inicio } : undefined;
+      const r = recorridoCruce(v.desde, v.maniobra, v.fin ?? SALIDA + escalon(v.id) * 6.5, desvio);
       recorridos[v.id] = r;
       actores.push({ id: v.id, largo: r.largo, sParada: r.sParada, s0: r.sParada + v.inicio });
     }

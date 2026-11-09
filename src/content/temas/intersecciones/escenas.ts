@@ -156,12 +156,13 @@ export const escenas: TemaEntrada["escenas"] = [
     situacion: "El carro rojo tiene luz verde, pero al otro lado del cruce hay una fila detenida y no queda espacio.",
     controles: { sur: "semaforo-verde" },
     vehiculos: [
-      { id: "rojo", nombre: "Carro rojo", color: ROJO, desde: "sur", maniobra: "recto", fin: 14 },
-      { id: "gris1", nombre: "Carro gris", color: GRIS, desde: "sur", maniobra: "recto", inicio: 15, fin: 26, etiqueta: false },
-      { id: "gris2", nombre: "Carro gris", color: GRIS, desde: "sur", maniobra: "recto", inicio: 21, fin: 33, etiqueta: false },
+      { id: "rojo", nombre: "Carro rojo", color: ROJO, desde: "sur", maniobra: "recto", inicio: -7, fin: 13 },
+      { id: "gris1", nombre: "Carro gris", color: GRIS, desde: "sur", maniobra: "recto", inicio: 15, fin: 19, etiqueta: false },
+      { id: "gris2", nombre: "Carro gris", color: GRIS, desde: "sur", maniobra: "recto", inicio: 21, fin: 26, etiqueta: false },
     ],
     pasos: [
-      { accion: "pausa", segundos: 1.6 },
+      { accion: "mover", vehiculo: "rojo", hasta: "parada" },
+      { accion: "pausa", segundos: 2 },
       { accion: "mover", vehiculo: "gris2" },
       { accion: "mover", vehiculo: "gris1" },
       { accion: "mover", vehiculo: "rojo" },
@@ -186,6 +187,24 @@ export const escenas: TemaEntrada["escenas"] = [
       { accion: "mover", vehiculo: "rojo" },
     ],
     explicacion: "Un vehículo de emergencia identificado con luces y sirena, atendiendo una emergencia, tiene prioridad. Puede continuar con luz roja, pero solo después de verificar que el cruce está libre; el rojo le cede el paso.",
+    ref: ley("Art. 104 inciso h) y art. 105 inciso c)"),
+  },
+  {
+    tipo: "cruce",
+    id: "ambulancia-mismo-carril",
+    titulo: "Ambulancia en el mismo carril",
+    situacion: "El carro rojo espera la luz roja en su carril. Por detrás, en el mismo carril, llega una ambulancia con luces y sirena que atiende una emergencia.",
+    controles: { sur: "semaforo-rojo" },
+    vehiculos: [
+      { id: "rojo", nombre: "Carro rojo", color: ROJO, desde: "sur", maniobra: "recto", inicio: -3, desvio: 1.1, fin: 14 },
+      { id: "ambulancia", nombre: "Ambulancia", color: BLANCO, desde: "sur", maniobra: "recto", emergencia: true, inicio: -10, desvio: -1.3, fin: 22 },
+    ],
+    pasos: [
+      { accion: "mover", vehiculo: "rojo", hasta: "parada" },
+      { accion: "pausa", segundos: 0.6 },
+      { accion: "mover", vehiculo: "ambulancia" },
+    ],
+    explicacion: "La ambulancia con luces y sirena, atendiendo una emergencia, tiene prioridad de paso sobre los demás vehículos, también sobre el que va delante en su mismo carril. El rojo le cede el paso: se corre a la derecha y espera, sin obstruirla, aunque siga con luz roja. La ambulancia cruza solo después de verificar que el cruce está libre.",
     ref: ley("Art. 104 inciso h) y art. 105 inciso c)"),
   },
   {

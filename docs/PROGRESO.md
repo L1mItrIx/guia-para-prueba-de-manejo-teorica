@@ -5,7 +5,7 @@
 ## Estado actual
 Sitio estático Next.js funcionando con la división **Carro (B1)** / **Moto (A, "Próximamente")**.
 Tema completo: **Intersecciones y derecho de vía**. Al entrar al tema se elige cómo estudiar (resumen, quiz o
-flashcards) y los tres modos incluyen 12 animaciones 3D (cruces, semáforos, peatones, noche, rotonda).
+flashcards) y los tres modos incluyen 13 animaciones 3D (cruces, semáforos, peatones, noche, rotonda).
 Simulacro de práctica y página de progreso. Textos neutrales e impersonales. Tests unitarios y e2e en verde.
 
 ## Hecho
@@ -16,7 +16,7 @@ Simulacro de práctica y página de progreso. Textos neutrales e impersonales. T
 - [x] Progreso en localStorage (sin cuentas) con protección si el navegador lo bloquea
 - [x] Inicio con elección Carro / Moto; Moto muestra "Próximamente"
 - [x] Tema "Intersecciones y derecho de vía" (Ley 9078 arts. 104, 105, 106, 108, 110, 121, 128 y multas 2026)
-- [x] Animaciones 3D dentro de resumen, quiz y flashcards: 12 escenas (tipos cruce y rotonda), línea de tiempo
+- [x] Animaciones 3D dentro de resumen, quiz y flashcards: 13 escenas (tipos cruce y rotonda), línea de tiempo
       declarativa, máximo 2 canvas vivos; se quitaron la presentación y el modo 3D aparte
 - [x] Simulacro (40 preguntas máx., 50 min, nota 70) con el banco verificado disponible
 - [x] Workflow de GitHub Pages
@@ -42,7 +42,7 @@ Simulacro de práctica y página de progreso. Textos neutrales e impersonales. T
 ## Cobertura de contenido
 | Tema | Licencia | Preguntas (con animación) | Flashcards (con animación) | Secciones del resumen | Escenas 3D |
 |---|---|---|---|---|---|
-| Intersecciones y derecho de vía | B1 | 22 (13) | 16 (12) | 9 (9 con animación) | 12 |
+| Intersecciones y derecho de vía | B1 | 22 (13) | 16 (12) | 9 (9 con animación) | 13 |
 
 ## Decisiones
 - 2026-11-09 — Sitio 100 % estático, sin cuentas; progreso en el navegador — pedido explícito: público general sin registro.
@@ -58,6 +58,7 @@ Simulacro de práctica y página de progreso. Textos neutrales e impersonales. T
 - 2026-11-09 — Videos generados grabando el sitio real (Playwright) + ffmpeg con subtítulos quemados; sin audio de terceros.
 
 ## Bitácora
+- 2026-11-09 — Escena "cruce congestionado" rehecha (la fila quedaba detenida y salía de cámara; ahora el rojo llega, espera y entra cuando avanza la fila). Escena nueva "Ambulancia en el mismo carril" (campo `desvio` en vehículos de cruce: el rojo se corre a la derecha, la ambulancia pasa por la izquierda), en la sección Emergencias del resumen.
 - 2026-11-09 — Textos neutrales; animaciones en los tres modos (6 escenas nuevas: amarillo, noche, peatones, cruce bloqueado, primaria/secundaria, rotonda).
 - 2026-11-09 — GitHub Pages activado y verificado (todas las rutas 200, escena 3D y quiz funcionando).
 - 2026-11-09 — Repo creado en GitHub por el usuario y código subido a `main`.

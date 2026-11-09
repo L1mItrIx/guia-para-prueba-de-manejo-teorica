@@ -14,6 +14,16 @@ describe("recorridoCruce", () => {
     cerca(inicio.z - enLinea.z, ATRAS);
     cerca(inicio.x, enLinea.x);
   });
+
+  it("con desvío se corre de lado, queda a un lado en la línea de parada y vuelve al centro del carril al cruzar", () => {
+    const base = recorridoCruce("sur", "recto");
+    const r = recorridoCruce("sur", "recto", undefined, { lateral: 1.2, desdeS: 8 });
+    cerca(r.en(0).x, base.en(0).x); // arranca en su carril
+    expect(Math.abs(r.en(r.sParada).x - base.en(base.sParada).x)).toBeGreaterThan(1.1); // ya corrido de lado
+    const dentro = r.largo - 3;
+    cerca(r.en(dentro).x, base.en(base.largo - 3).x, 2); // sale otra vez por el centro de su carril
+    expect(r.sParada).toBeGreaterThanOrEqual(ATRAS);
+  });
 });
 
 describe("rotonda (sentido antihorario visto desde arriba)", () => {

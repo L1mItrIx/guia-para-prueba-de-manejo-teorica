@@ -128,10 +128,39 @@ export function crearRecorrido(puntos: V2[], sParada: number): Recorrido {
   return { puntos, largo, sParada, en };
 }
 
+/** Desvío lateral de un vehículo que va recto: lateral en m (+ derecha) y metros de recorrido donde empieza a correrse. */
+export type Desvio = { lateral: number; desdeS: number };
+
+const LARGO_DESVIO = 4; // metros que tarda en correrse de lado
+const LARGO_REGRESO = 6; // metros que tarda en volver al centro de su carril dentro del cruce
+
 /** Recorrido de un vehículo en un cruce: empieza ATRAS metros antes de su línea de parada (sParada = ATRAS). */
-export function recorridoCruce(desde: Direccion, maniobra: Maniobra, fin = SALIDA): Recorrido {
+export function recorridoCruce(desde: Direccion, maniobra: Maniobra, fin = SALIDA, desvio?: Desvio): Recorrido {
   const h = rumboDesde(desde);
   const espera = posicionDeEspera(desde);
   const inicio = { x: espera.x - h.x * ATRAS, z: espera.z - h.z * ATRAS };
-  return crearRecorrido([inicio, ...rutaVehiculo(desde, maniobra, fin)], ATRAS);
+  const ruta = rutaVehiculo(desde, maniobra, fin);
+  if (!desvio || desvio.lateral === 0 || maniobra !== "recto") return crearRecorrido([inicio, ...ruta], ATRAS);
+
+  // Tramo recto (inicio → salida del cruce) muestreado cada metro, con el desvío lateral aplicado.
+  const r = derechaDe(h);
+  const sEntrada = ATRAS + Math.hypot(ruta[1].x - espera.x, ruta[1].z - espera.z);
+  const sSalida = sEntrada + 2 * BORDE_CRUCE;
+  const hasta = Math.min(ATRAS, desvio.desdeS + LARGO_DESVIO);
+  const peso = (s: number) => {
+    const entra = hasta > desvio.desdeS ? Math.min(1, Math.max(0, (s - desvio.desdeS) / (hasta - desvio.desdeS))) : 1;
+    const sale = Math.min(1, Math.max(0, (s - sEntrada) / LARGO_REGRESO));
+    return entra * (1 - sale);
+  };
+  const muestras = [...new Set([...Array.from({ length: Math.floor(sSalida) + 1 }, (_, i) => i), ATRAS, sEntrada, sSalida])].sort((a, b) => a - b);
+  const puntos: V2[] = muestras.map((s) => {
+    const k = peso(s) * desvio.lateral;
+    return { x: inicio.x + h.x * s + r.x * k, z: inicio.z + h.z * s + r.z * k };
+  });
+  puntos.push(ruta[ruta.length - 1]);
+  // sParada = metros recorridos (sobre la polilínea) hasta la línea de parada.
+  const iParada = muestras.indexOf(ATRAS);
+  let sParada = 0;
+  for (let i = 1; i <= iParada; i++) sParada += Math.hypot(puntos[i].x - puntos[i - 1].x, puntos[i].z - puntos[i - 1].z);
+  return crearRecorrido(puntos, sParada);
 }

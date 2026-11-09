@@ -95,6 +95,11 @@ export const VehiculoCruce = z.object({
   inicio: z.number().min(-20).max(30).default(0),
   /** Hasta dónde llega desde el centro del cruce al terminar (m). Si falta, se escalona según el orden. */
   fin: z.number().min(8).max(40).optional(),
+  /**
+   * Desvío lateral en metros (+ a la derecha, − a la izquierda). El vehículo se corre de lado apenas empieza a
+   * avanzar y vuelve a su carril al entrar al cruce. Solo con `maniobra: "recto"`.
+   */
+  desvio: z.number().min(-2).max(2).default(0),
   etiqueta: z.boolean().default(true),
 });
 export type VehiculoCruce = z.infer<typeof VehiculoCruce>;

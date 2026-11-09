@@ -23,7 +23,7 @@ export function describirEscena(e: Escena): string[] {
     .filter((v) => v.etiqueta)
     .map((v) => {
       const c = e.controles[v.desde];
-      return `${v.nombre}: llega por el ${v.desde} y ${MANIOBRA[v.maniobra]}${c && c !== "ninguno" ? `; tiene ${CONTROL[c]}` : "; sin señal"}${v.emergencia ? "; con luces y sirena" : ""}.`;
+      return `${v.nombre}: llega por el ${v.desde} y ${MANIOBRA[v.maniobra]}${c && c !== "ninguno" ? `; tiene ${CONTROL[c]}` : "; sin señal"}${v.emergencia ? "; con luces y sirena" : ""}${v.desvio > 0 ? "; se corre hacia la derecha" : v.desvio < 0 ? "; avanza por la izquierda del carro de adelante" : ""}.`;
     });
   if (e.peatones.length) lineas.push(`Hay ${e.peatones.length} peatones en el paso peatonal del brazo ${e.peatones[0].paso}.`);
   return lineas;

@@ -97,7 +97,7 @@ export const resumen: TemaEntrada["resumen"] = [
       "Tienen prioridad de paso sobre los demás vehículos siempre que se identifiquen con señales visuales y sonoras y estén atendiendo una emergencia.",
     ],
     puntosClave: ["Con luces y sirena en emergencia: tienen prioridad", "Sin alarmas activadas: son un vehículo más"],
-    escenas: ["ambulancia"],
+    escenas: ["ambulancia", "ambulancia-mismo-carril"],
     ref: ley("Art. 104 inciso h) y art. 105 inciso c)"),
   },
   {
